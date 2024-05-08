@@ -20,7 +20,8 @@ int main()
 {
 	DrawTitle();
 
-
+	cout << "hello";
+	cout << "hello";
 
 	return 0;
 }
