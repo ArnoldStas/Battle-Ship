@@ -2,6 +2,9 @@
 #include <Windows.h>
 #include <conio.h>
 #include <ctime>
+#include <vector>
+#include <map>
+
 using namespace std;
 
 #define RESET "\033[0m" //Reset to DEFAULT color
@@ -19,14 +22,14 @@ using namespace std;
 class BASE_S_M_Player
 {
 	private:
-		bool exitGameBoardMenu;
+		bool exitGameBoardMenu, S, M;
 		int GameBoardSelectedOption;
 		char keyGameBoardPressed;
 	protected:
-
+		char SPlayerBoard;
 	public:
-BASE_S_M_Player() : exitGameBoardMenu(0), GameBoardSelectedOption(0), keyGameBoardPressed (' ') {}
-BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelectedOption(y), keyGameBoardPressed(z) {}
+BASE_S_M_Player() : exitGameBoardMenu(0), GameBoardSelectedOption(0), keyGameBoardPressed (' '), S(0), M(0), SPlayerBoard(' ') {}
+BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelectedOption(y), keyGameBoardPressed(z), S(0), M(0), SPlayerBoard(' ') {}
 ~BASE_S_M_Player() {}
 
 		void ClearScreen()
@@ -56,7 +59,7 @@ BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelected
 		{
 			ClearScreen();
 
-			cout <<"     SinglePlayer(A)";
+			cout <<"     SinglePlayer (A)";
 			cout << "                             ";
 			cout << "MultiPlayer (A & B)";
 			cout << endl << endl;
@@ -159,7 +162,7 @@ BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelected
 				{
 					ClearScreen();
 
-					cout << RED << "     SinglePlayer(A)" << RESET;
+					cout << RED << "     SinglePlayer (A)" << RESET;
 					cout << "                             ";
 					cout << "MultiPlayer (A & B)";
 					cout << endl << endl;
@@ -248,7 +251,7 @@ BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelected
 				{
 					ClearScreen();
 
-					cout << "     SinglePlayer(A)";
+					cout << "     SinglePlayer (A)";
 					cout << "                             ";
 					cout << RED << "MultiPlayer (A & B)" << RESET;
 					cout << endl << endl;
@@ -370,20 +373,104 @@ BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelected
 					{
 					case 0:
 						cout << "Displaying SINGLE PLAYER" << endl;
+						S = 1;
 						break;
 					case 1:
 						cout << "Displaying MULTI PLAYER" << endl;
+						M = 1;
 						break;
 					}
 					exitGameBoardMenu = true;
 				}
 			}
 		}
+
+		bool retr_S()
+		{
+			return S;
+		}
+
+		bool retr_M()
+		{
+			return M;
+		}
 };
 
 class SinglePlayerC : public BASE_S_M_Player
 {
+	private:
+		string S_name;
 	public:
+		void drawLoading_S_P_GameBoard()
+		{
+			time_t startTime = time(nullptr); // Gaunamas pradinis laikas
+
+			while (true)
+			{
+				system("cls");
+				ClearScreen();
+				cout << YELLOW << "LOADING SINGLE PLAYER MODE." << RESET << endl;
+				Sleep(500);
+				ClearScreen();
+				cout << YELLOW << "LOADING SINGLE PLAYER MODE.." << RESET << endl;
+				Sleep(500);
+				ClearScreen();
+				cout << YELLOW << "LOADING SINGLE PLAYER MODE..." << RESET << endl;
+				Sleep(500);
+
+				if (difftime(time(nullptr), startTime) >= 1) break; // Tikriname ar 1 sec jau praejo
+			}
+		}
+
+		void drawS_P_title()
+		{
+			cout << YELLOW << " ***************************************************************************************************" << RESET << endl;
+			cout << YELLOW << "** " << RESET << RED << "########" << ORANGE << "  ##  ###   ##  ########  ##        ########    ##     ##  ########  #######   " << RED << "########" << YELLOW << " **" << RESET << endl;
+			cout << YELLOW << "** " << RESET << ORANGE << "##        ##  ## #  ##  ##        ##        ##          ## # # ##  ##    ##  ##    ##  ##      " << YELLOW << " **" << RESET << endl;
+			cout << YELLOW << "** " << RESET << RED << "########  ##  ##  # ##  ##  ####  ##        ########    ##  #  ##  ##    ##  ##    ##  ########" << YELLOW << " **" << RESET << endl;
+			cout << YELLOW << "** " << RESET << ORANGE << "      ##  ##  ##   ###  ##    ##  ##        ##          ##     ##  ##    ##  ##    ##  ##      " << YELLOW << " **" << RESET << endl;
+			cout << YELLOW << "** " << RESET << RED << "########" << ORANGE << "  ##  ##    ##  ########  ########  ########    ##     ##  ########  #######   " << RED << "########" << YELLOW << " **" << RESET << endl;
+			cout << YELLOW << " ***************************************************************************************************" << RESET << endl;
+			cout << endl;
+		}
+
+		void enterYourName()
+		{
+			system("cls");
+			drawS_P_title();
+			cout << GREY << "Please ENTER your name: " << RESET;
+
+			cout << RED;
+			cin >> S_name;
+			cout << RESET;
+		}
+
+		void drawS_P_GameBoard()
+		{
+			system("cls");
+			drawS_P_title();
+			cout << GREY << "                                     " <<" |" << RED << S_name << "'s" << GREY << "| GAMEBOARD:                      " << RESET << endl << endl;
+
+			cout << GREY << "                                       *********************" << RESET << endl;
+			cout << GREY << "                                     * " << ORANGE << "x" << RESET << YELLOW << " A B C D E F G H I J" << GREY << " * " << RESET << endl;
+
+			vector<vector<char>> SPlayerBoard(10, vector<char>(10));
+
+			for (int i = 0; i < 10; i++) 
+				for (int j = 0; j < 10; j++) 
+					SPlayerBoard[i][j] = '#';
+
+			for (int i = 0; i < 10; i++)
+			{
+				cout << GREY << "                                     * " << YELLOW << i << RESET << " ";
+				for (int j = 0; j < 10; j++)
+				{
+					cout << BLUE << SPlayerBoard[i][j] << RESET << " ";
+				}
+				cout << GREY << "*" << RESET << endl;
+			}
+			cout << GREY << "                                       *********************" << RESET << endl;
+		}
 
 };
 
@@ -413,17 +500,13 @@ void ShowConsoleCursor(bool showFlag); // Panaikinti cursor'iu
 
 void directionsGameMenu();
 
+void directionsSinglePlayerGameMenu();
+void directionsMultiPlayerGameMenu();
+
 int main()
 {
 	DrawTitle();
 	Menu();
-
-
-
-
-
-
-
 
 
 	return 0;
@@ -557,6 +640,30 @@ void directionsGameMenu()
 
 	bazinis.drawGameBoard_CURSOR();
 
+	bool S, M;
+	S = bazinis.retr_S();
+	M = bazinis.retr_M();
+
+	if (S == true) directionsSinglePlayerGameMenu();
+	if (M == true) directionsMultiPlayerGameMenu();
+
+	//cout << "S = " << S << endl;
+	//cout << "M = " << M;
+
+}
+
+void directionsSinglePlayerGameMenu()
+{
+	SinglePlayerC single;
+	single.drawLoading_S_P_GameBoard();
+	single.enterYourName();
+	single.drawS_P_GameBoard();
+
+
+}
+
+void directionsMultiPlayerGameMenu()
+{
 
 }
 
