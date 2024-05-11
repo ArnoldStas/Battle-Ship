@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <Windows.h>
 #include <conio.h>
 #include <ctime>
@@ -26,10 +27,13 @@ class BASE_S_M_Player
 		int GameBoardSelectedOption;
 		char keyGameBoardPressed;
 	protected:
-		char SPlayerBoard;
+		vector <vector<char>> SPlayerBoard;
+		vector <vector<char>> SPlayerBoard_second;
+		const int GameBoardSize, GameBoardSize_Horizontal, GameBoardSize_Vertical;
+		int X, Y;
 	public:
-BASE_S_M_Player() : exitGameBoardMenu(0), GameBoardSelectedOption(0), keyGameBoardPressed (' '), S(0), M(0), SPlayerBoard(' ') {}
-BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelectedOption(y), keyGameBoardPressed(z), S(0), M(0), SPlayerBoard(' ') {}
+BASE_S_M_Player() : exitGameBoardMenu(0), GameBoardSelectedOption(0), keyGameBoardPressed (' '), S(0), M(0), SPlayerBoard(10, vector<char>(10)), SPlayerBoard_second(10, vector<char>(10)), GameBoardSize(10), GameBoardSize_Horizontal(10), GameBoardSize_Vertical(10), X(0), Y(0) {}
+BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelectedOption(y), keyGameBoardPressed(z), S(0), M(0), SPlayerBoard(10, vector<char>(10)), SPlayerBoard_second(10, vector<char>(10)), GameBoardSize(10), GameBoardSize_Horizontal(10), GameBoardSize_Vertical(10), X(0), Y(0) {}
 ~BASE_S_M_Player() {}
 
 		void ClearScreen()
@@ -372,7 +376,7 @@ BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelected
 					switch (GameBoardSelectedOption)
 					{
 					case 0:
-						cout << "Displaying SINGLE PLAYER" << endl;
+						//cout << "Displaying SINGLE PLAYER" << endl;
 						S = 1;
 						break;
 					case 1:
@@ -394,13 +398,19 @@ BASE_S_M_Player(bool x, int y, char z) : exitGameBoardMenu(x), GameBoardSelected
 		{
 			return M;
 		}
+
 };
 
 class SinglePlayerC : public BASE_S_M_Player
 {
 	private:
 		string S_name;
+		bool test_1, test_2, test_3, test_4;
+		int test_count, selectedTest;
 	public:
+SinglePlayerC() : S_name(" "), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0) {}
+SinglePlayerC(string x) : S_name(x), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0) {}
+~SinglePlayerC() {}
 		void drawLoading_S_P_GameBoard()
 		{
 			time_t startTime = time(nullptr); // Gaunamas pradinis laikas
@@ -454,11 +464,8 @@ class SinglePlayerC : public BASE_S_M_Player
 			cout << GREY << "                                       *********************" << RESET << endl;
 			cout << GREY << "                                     * " << ORANGE << "x" << RESET << YELLOW << " A B C D E F G H I J" << GREY << " * " << RESET << endl;
 
-			vector<vector<char>> SPlayerBoard(10, vector<char>(10));
-
-			for (int i = 0; i < 10; i++) 
-				for (int j = 0; j < 10; j++) 
-					SPlayerBoard[i][j] = '#';
+			for (int i = 0; i < 10; i++)
+				for (int j = 0; j < 10; j++) { SPlayerBoard[i][j] = '#'; SPlayerBoard_second[i][j] = '#'; }
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -470,6 +477,220 @@ class SinglePlayerC : public BASE_S_M_Player
 				cout << GREY << "*" << RESET << endl;
 			}
 			cout << GREY << "                                       *********************" << RESET << endl;
+			cout << endl;
+		}
+
+		void generate_4SHIP()
+		{
+			/*
+			 x  0  1  2  3  4  5  6  7  8  9
+			 0 0A 0B 0C 0D 0E 0F 0G 0H 0I 0J
+			 1 1A 1B 1C 1D 1E 1F 1G 1H 1I 1J
+			 2 2A 2B 2C 2D 2E 2F 2G 2H 2I 2J
+			 3 3A 3B 3C 3D 3E 3F 3G 3H 3I 3J
+			 4 4A 4B 4C 4D 4E 4F 4G 4H 4I 4J
+			 5 5A 5B 5C 5D 5E 5F 5G 5H 5I 5J
+			 6 6A 6B 6C 6D 6E 6F 6G 6H 6I 6J
+			 7 7A 7B 7C 7D 7E 7F 7G 7H 7I 7J
+			 8 8A 8B 8C 8D 8E 8F 8G 8H 8I 8J
+			 9 9A 9B 9C 9D 9E 9F 9G 9H 9I 9J
+			*/
+
+			srand(static_cast<unsigned int>(time(0)));
+
+			X = rand() % GameBoardSize;
+			Y = rand() % GameBoardSize;
+
+			//X = 3;
+			//Y = 2;
+
+			SPlayerBoard_second[Y][X] = 'S';
+
+			if (X + 1 < 10)
+				if (SPlayerBoard_second[Y][X + 1] = '#')
+					if (X + 2 < 10)
+						if (SPlayerBoard_second[Y][X + 2] = '#')
+							if (X + 3 < 10)
+								if (SPlayerBoard_second[Y][X + 3] = '#') {
+									test_1 = true; test_count++;
+								}
+
+			if (Y + 1 < 10)
+				if (SPlayerBoard_second[Y + 1][X] = '#')
+					if (Y + 2 < 10)
+						if (SPlayerBoard_second[Y + 2][X] = '#')
+							if (Y + 3 < 10)
+								if (SPlayerBoard_second[Y + 3][X] = '#') {
+									test_2 = true; test_count++;
+								}
+
+			if (X - 1 > 0)
+				if (SPlayerBoard_second[Y][X - 1] = '#')
+					if (X - 2 > 0)
+						if (SPlayerBoard_second[Y][X - 2] = '#')
+							if (X - 3 > 0)
+								if (SPlayerBoard_second[Y][X - 3] = '#') {
+									test_3 = true; test_count++;
+								}
+
+			if (Y - 1 > 0)
+				if (SPlayerBoard_second[Y - 1][X] = '#')
+					if (Y - 2 > 0)
+						if (SPlayerBoard_second[Y - 2][X] = '#')
+							if (Y - 3 > 0)
+								if (SPlayerBoard_second[Y - 3][X] = '#') {
+									test_4 = true; test_count++;
+								}
+
+			if (test_1 == true && test_2 == false && test_3 == false && test_4 == false) selectedTest = 0; //0 1 2 3 (0)
+			if (test_1 == false && test_2 == true && test_3 == false && test_4 == false) selectedTest = 1; //0 1 2 3 (1)
+			if (test_1 == false && test_2 == false && test_3 == true && test_4 == false) selectedTest = 2; //0 1 2 3 (2)
+			if (test_1 == false && test_2 == false && test_3 == false && test_4 == true) selectedTest = 0; //0 1 2 3 (3)
+			if (test_1 == true && test_2 == true && test_3 == false && test_4 == false) selectedTest = rand() % test_count; //0 1 2 3 (01)
+			if (test_1 == true && test_2 == false && test_3 == true && test_4 == false)
+			{
+				do {
+					selectedTest = rand() % (test_count + 1); //0 1 2 3 (02)
+				} while (selectedTest == 1);
+			}
+			if (test_1 == true && test_2 == false && test_3 == false && test_4 == true)
+			{
+				do {
+					selectedTest = rand() % (test_count + 2); //0 1 2 3 (03)
+				} while (selectedTest == 1 || selectedTest == 2);
+			}
+			if (test_1 == true && test_2 == true && test_3 == true && test_4 == false) selectedTest = rand() % test_count; //0 1 2 3 (012)
+			if (test_1 == true && test_2 == true && test_3 == false && test_4 == true)
+			{
+				do {
+					selectedTest = rand() % (test_count + 1); //0 1 2 3 (013)
+				} while (selectedTest == 2);
+			}
+			if (test_1 == true && test_2 == false && test_3 == true && test_4 == true)
+			{
+				do {
+					selectedTest = rand() % (test_count + 1); //0 1 2 3 (023)
+				} while (selectedTest == 1);
+			}
+			if (test_1 == false && test_2 == true && test_3 == true && test_4 == false)
+			{
+				do {
+					selectedTest = rand() % (test_count + 1); //0 1 2 3 (12)
+				} while (selectedTest == 0);
+			}
+			if (test_1 == false && test_2 == true && test_3 == false && test_4 == true)
+			{
+				do {
+					selectedTest = rand() % (test_count + 2); //0 1 2 3 (13)
+				} while (selectedTest == 0 || selectedTest == 2);
+			}
+			if (test_1 == false && test_2 == true && test_3 == true && test_4 == true)
+			{
+				do {
+					selectedTest = rand() % (test_count + 1); //0 1 2 3 (123)
+				} while (selectedTest == 0);
+			}
+			if (test_1 == false && test_2 == false && test_3 == true && test_4 == true)
+			{
+				do {
+					selectedTest = rand() % (test_count + 2); //0 1 2 3 (23)
+				} while (selectedTest == 0 || selectedTest == 1);
+			}
+
+			if (selectedTest == 0) {
+				SPlayerBoard_second[Y][X + 1] = 'S';
+				SPlayerBoard_second[Y][X + 2] = 'S';
+				SPlayerBoard_second[Y][X + 3] = 'S';
+			}
+			if (selectedTest == 1) {
+				SPlayerBoard_second[Y + 1][X] = 'S';
+				SPlayerBoard_second[Y + 2][X] = 'S';
+				SPlayerBoard_second[Y + 3][X] = 'S';
+			}
+			if (selectedTest == 2) {
+				SPlayerBoard_second[Y][X - 1] = 'S';
+				SPlayerBoard_second[Y][X - 2] = 'S';
+				SPlayerBoard_second[Y][X - 3] = 'S';
+			}
+			if (selectedTest == 3) {
+				SPlayerBoard_second[Y - 1][X] = 'S';
+				SPlayerBoard_second[Y - 2][X] = 'S';
+				SPlayerBoard_second[Y - 3][X] = 'S';
+			}
+		}
+
+		void generate_4SHIP_zone()
+		{
+			ofstream test;
+			test.open("test.txt");
+
+			test << "X: " << X << endl;
+			test << "Y: " << Y << endl << endl;
+
+			test << "test_1: " << test_1 << endl;
+			test << "test_2: " << test_2 << endl;
+			test << "test_3: " << test_3 << endl;
+			test << "test_4: " << test_4 << endl << endl;
+
+			for (int i = 0; i < 10; i++) {
+				for (int j = 0; j < 10; j++) {
+					if (SPlayerBoard_second[i][j] == 'S' && i > 0 && SPlayerBoard_second[i - 1][j] == '#') SPlayerBoard_second[i - 1][j] = '-';
+					if (SPlayerBoard_second[i][j] == 'S' && i < 9 && SPlayerBoard_second[i + 1][j] == '#') SPlayerBoard_second[i + 1][j] = '-';
+					if (SPlayerBoard_second[i][j] == 'S' && j > 0 && SPlayerBoard_second[i][j - 1] == '#') SPlayerBoard_second[i][j - 1] = '-';
+					if (SPlayerBoard_second[i][j] == 'S' && j < 9 && SPlayerBoard_second[i][j + 1] == '#') SPlayerBoard_second[i][j + 1] = '-';
+
+					if (SPlayerBoard_second[i][j] == 'S' && (i > 0 && j > 0) && SPlayerBoard_second[i - 1][j - 1] == '#') SPlayerBoard_second[i - 1][j - 1] = '-';
+					if (SPlayerBoard_second[i][j] == 'S' && (i < 9 && j > 0) && SPlayerBoard_second[i + 1][j - 1] == '#') SPlayerBoard_second[i + 1][j - 1] = '-';
+					if (SPlayerBoard_second[i][j] == 'S' && (i > 0 && j < 9) && SPlayerBoard_second[i - 1][j + 1] == '#') SPlayerBoard_second[i - 1][j + 1] = '-';
+					if (SPlayerBoard_second[i][j] == 'S' && (i < 9 && j < 9) && SPlayerBoard_second[i + 1][j + 1] == '#') SPlayerBoard_second[i + 1][j + 1] = '-';
+				}
+			}
+
+			test << "  *********************" << endl;
+			test << "* " << "x" << " A B C D E F G H I J" << " * " << endl;
+			for (int i = 0; i < 10; i++)
+			{
+				test << "* " << i << " ";
+				for (int j = 0; j < 10; j++)
+				{
+					test << SPlayerBoard_second[i][j] << " ";
+				}
+				test << "*" << endl;
+			}
+			test << "  *********************" << endl;
+
+			test.close();
+		}
+
+		void drawLoading_S_P_4SHIP()
+		{
+			time_t startTime = time(nullptr); // Gaunamas pradinis laikas
+
+			while (true)
+			{
+				//system("cls");
+				//ClearScreen();
+				cout << YELLOW << "GENERATING 4 LENGHT SHIP (20%): " << BROWN << "SSSS" << RESET << endl;
+				Sleep(500);
+				ClearScreen();
+				drawS_P_title();
+				drawS_P_GameBoard();
+				cout << YELLOW << "GENERATING 4 LENGHT SHIP (80%): " << BROWN << "SSSS" << RESET << endl;
+				Sleep(500);
+				ClearScreen();
+				drawS_P_title();
+				drawS_P_GameBoard();
+				cout << YELLOW << "GENERATING 4 LENGHT SHIP (99%): " << BROWN << "SSSS" << RESET << endl;
+				Sleep(500);
+				ClearScreen();
+				drawS_P_title();
+				drawS_P_GameBoard();
+				//system("cls");
+				cout << GREEN << "DONE! " << WHITE << "- " << BROWN << "SSSS(" << WHITE << "1" << BROWN << ")" << RESET << endl;
+				Sleep(500);
+
+				if (difftime(time(nullptr), startTime) >= 1) break; // Tikriname ar 1 sec jau praejo
+			}
 		}
 
 };
@@ -655,9 +876,14 @@ void directionsGameMenu()
 void directionsSinglePlayerGameMenu()
 {
 	SinglePlayerC single;
+
 	single.drawLoading_S_P_GameBoard();
 	single.enterYourName();
 	single.drawS_P_GameBoard();
+
+	single.generate_4SHIP();
+	single.generate_4SHIP_zone();
+	single.drawLoading_S_P_4SHIP();
 
 
 }
