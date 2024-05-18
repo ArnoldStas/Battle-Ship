@@ -9,8 +9,10 @@
 #include <ctype.h>
 #include <sstream>
 #include <cstdlib>
+#include <chrono>
 
 using namespace std;
+using namespace chrono;
 
 #define RESET "\033[0m" //Reset to DEFAULT color
 #define RED "\033[31m" //RED color
@@ -50,6 +52,25 @@ public:
 		Position.X = 0;
 		Position.Y = 0;
 		SetConsoleCursorPosition(hOut, Position);
+	}
+
+	void ClearScreen_the_whole()
+	{
+		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		DWORD count;
+		COORD homeCoords = { 0, 0 };
+
+		if (hOut == INVALID_HANDLE_VALUE) return;
+
+		if (!GetConsoleScreenBufferInfo(hOut, &csbi)) return;
+
+		DWORD cellCount = csbi.dwSize.X * csbi.dwSize.Y;
+
+		FillConsoleOutputCharacter(hOut, ' ', cellCount, homeCoords, &count);
+
+		FillConsoleOutputAttribute(hOut, csbi.wAttributes, cellCount, homeCoords, &count);
+		SetConsoleCursorPosition(hOut, homeCoords);
 	}
 
 	void ShowConsoleCursor(bool showFlag)
@@ -414,21 +435,10 @@ private:
 	char letter;
 	int number, letter_number;
 	int S_P_score, ships_count;
-	string letter_to_str, number_to_str, letter_number_str;
-	string ship_coord_nmb_to_str, ship_coord_ltr_to_str, ship_coord_nmb_ltr_to_str;
-	set <string> SHIP4_coords;
-	set <string> SHIP3_coords_1;
-	set <string> SHIP3_coords_2;
-	set <string> SHIP2_coords_1;
-	set <string> SHIP2_coords_2;
-	set <string> SHIP2_coords_3;
-	set <string> SHIP1_coords_1;
-	set <string> SHIP1_coords_2;
-	set <string> SHIP1_coords_3;
-	set <string> SHIP1_coords_4;
+	string letter_to_str, number_to_str, letter_number_str, ltr_str, nmb_ltr_str;
 public:
-	SinglePlayerC() : S_name(" "), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(10), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ship_coord_nmb_to_str(" "), ship_coord_ltr_to_str(" "), ship_coord_nmb_ltr_to_str(" ") {}
-	SinglePlayerC(string x) : S_name(x), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(10), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ship_coord_nmb_to_str(" "), ship_coord_ltr_to_str(" "), ship_coord_nmb_ltr_to_str(" ") {}
+	SinglePlayerC() : S_name(" "), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(20), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ltr_str(" "), nmb_ltr_str(" ") {}
+	SinglePlayerC(string x) : S_name(x), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(20), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ltr_str(" "), nmb_ltr_str(" ") {}
 	~SinglePlayerC() {}
 	void drawLoading_S_P_GameBoard()
 	{
@@ -505,6 +515,31 @@ public:
 		cout << endl;
 	}
 
+	void drawS_P_GameBoard_without_cls()
+	{
+		ClearScreen_the_whole();
+
+		drawS_P_title();
+		cout << GREY << "                                     " << " |" << RED << S_name << "'s" << GREY << "| GAMEBOARD:                      " << RESET << endl << endl;
+
+		cout << GREY << "                                       *********************" << RESET << endl;
+		cout << GREY << "                                     * " << ORANGE << "x" << RESET << YELLOW << " A B C D E F G H I J" << GREY << " * " << RESET << endl;
+
+		for (int i = 0; i < 10; i++)
+		{
+			cout << GREY << "                                     * " << YELLOW << i << RESET << " ";
+			for (int j = 0; j < 10; j++)
+			{
+				if (SPlayerBoard[i][j] == 'O') cout << CYAN << SPlayerBoard[i][j] << RESET << " ";
+				if (SPlayerBoard[i][j] == 'X') cout << RED << SPlayerBoard[i][j] << RESET << " ";
+				if (SPlayerBoard[i][j] == '#') cout << BLUE << SPlayerBoard[i][j] << RESET << " ";
+			}
+			cout << GREY << "*" << RESET << endl;
+		}
+		cout << GREY << "                                       *********************" << RESET << endl;
+		cout << endl;
+	}
+
 	void generate_4SHIP()
 	{
 		/*
@@ -549,20 +584,20 @@ public:
 								test_2 = true; test_count++;
 							}
 
-		if (X - 1 > 0)
+		if (X - 1 >= 0)
 			if (SPlayerBoard_second[Y][X - 1] == '#')
-				if (X - 2 > 0)
+				if (X - 2 >= 0)
 					if (SPlayerBoard_second[Y][X - 2] == '#')
-						if (X - 3 > 0)
+						if (X - 3 >= 0)
 							if (SPlayerBoard_second[Y][X - 3] == '#') {
 								test_3 = true; test_count++;
 							}
 
-		if (Y - 1 > 0)
+		if (Y - 1 >= 0)
 			if (SPlayerBoard_second[Y - 1][X] == '#')
-				if (Y - 2 > 0)
+				if (Y - 2 >= 0)
 					if (SPlayerBoard_second[Y - 2][X] == '#')
-						if (Y - 3 > 0)
+						if (Y - 3 >= 0)
 							if (SPlayerBoard_second[Y - 3][X] == '#') {
 								test_4 = true; test_count++;
 							}
@@ -628,46 +663,12 @@ public:
 			SPlayerBoard_second[Y][X + 2] = 'S';
 			SPlayerBoard_second[Y][X + 3] = 'S';
 
-			ship_coord_ltr_to_str = to_string(Y);
-			ship_coord_nmb_to_str = to_string(X);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_nmb_to_str = to_string(X + 1);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_nmb_to_str = to_string(X + 2);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_nmb_to_str = to_string(X + 3);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
 		}
 		if (selectedTest == 1) {
 
 			SPlayerBoard_second[Y + 1][X] = 'S';
 			SPlayerBoard_second[Y + 2][X] = 'S';
 			SPlayerBoard_second[Y + 3][X] = 'S';
-
-			ship_coord_ltr_to_str = to_string(Y);
-			ship_coord_nmb_to_str = to_string(X);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_ltr_to_str = to_string(Y + 1);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_ltr_to_str = to_string(Y + 2);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_ltr_to_str = to_string(Y + 3);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
 
 		}
 		if (selectedTest == 2) {
@@ -676,45 +677,12 @@ public:
 			SPlayerBoard_second[Y][X - 2] = 'S';
 			SPlayerBoard_second[Y][X - 3] = 'S';
 
-			ship_coord_ltr_to_str = to_string(Y);
-			ship_coord_nmb_to_str = to_string(X);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_nmb_to_str = to_string(X - 1);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_nmb_to_str = to_string(X - 2);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_nmb_to_str = to_string(X - 3);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
 		}
 		if (selectedTest == 3) {
 
 			SPlayerBoard_second[Y - 1][X] = 'S';
 			SPlayerBoard_second[Y - 2][X] = 'S';
 			SPlayerBoard_second[Y - 3][X] = 'S';
-
-			ship_coord_ltr_to_str = to_string(Y);
-			ship_coord_nmb_to_str = to_string(X);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_ltr_to_str = to_string(Y - 1);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_ltr_to_str = to_string(Y - 2);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
-
-			ship_coord_ltr_to_str = to_string(Y - 3);
-			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
-			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
 
 		}
 	}
@@ -766,19 +734,19 @@ public:
 	{
 		srand(static_cast<unsigned int>(time(0)));
 
-		while (SPlayerBoard_second[Y][X] == 'S' || SPlayerBoard_second[Y][X] == '-')
-		{
-			X = rand() % GameBoardSize;
-			Y = rand() % GameBoardSize;
-		}
-
-		//X = 3;
-		//Y = 2;
-
-		SPlayerBoard_second[Y][X] = 'S';
-
 		while (true)
 		{
+			while (SPlayerBoard_second[Y][X] == 'S' || SPlayerBoard_second[Y][X] == '-')
+			{
+				X = rand() % GameBoardSize;
+				Y = rand() % GameBoardSize;
+			}
+
+			//X = 3;
+			//Y = 2;
+
+			SPlayerBoard_second[Y][X] = 'S';
+
 			test_1 = false;
 			test_2 = false;
 			test_3 = false;
@@ -945,19 +913,19 @@ public:
 	{
 		srand(static_cast<unsigned int>(time(0)));
 
-		while (SPlayerBoard_second[Y][X] == 'S' || SPlayerBoard_second[Y][X] == '-')
-		{
-			X = rand() % GameBoardSize;
-			Y = rand() % GameBoardSize;
-		}
-
-		//X = 3;
-		//Y = 2;
-
-		SPlayerBoard_second[Y][X] = 'S';
-
 		while (true)
 		{
+			while (SPlayerBoard_second[Y][X] == 'S' || SPlayerBoard_second[Y][X] == '-')
+			{
+				X = rand() % GameBoardSize;
+				Y = rand() % GameBoardSize;
+			}
+
+			//X = 3;
+			//Y = 2;
+
+			SPlayerBoard_second[Y][X] = 'S';
+
 			test_1 = false;
 			test_2 = false;
 			test_3 = false;
@@ -1170,6 +1138,10 @@ public:
 			{'J', 0}, {'J', 1}, {'J', 2}, {'J', 3}, {'J', 4}, {'J', 5}, {'J', 6}, {'J', 7}, {'J', 8}, {'J', 9},
 		};
 
+		cout << BLUE << "Score: - - " << RESET << endl;
+		cout << BLUE << "Last taken shot: - - " << RESET << endl;
+		cout << BLUE << "Remaining ship's parts: " << ships_count << RESET << endl;
+
 		while (!validInput)
 		{
 			cout << endl;
@@ -1220,13 +1192,16 @@ public:
 			if (letter == 'I') letter_number = 8;
 			if (letter == 'J') letter_number = 9;
 
+			ltr_str = to_string(letter_number);
+			nmb_ltr_str = ltr_str + number_to_str;
+
 			if (SPlayerBoard_second[number][letter_number] == '#' || SPlayerBoard_second[number][letter_number] == '-') {
 				cout << endl;
 				if (letter >= 'A' && letter <= 'J') SPlayerBoard[number][letter_number] = 'O';
 				ShowConsoleCursor(false);
 				ClearScreen();
 				drawS_P_title();
-				drawS_P_GameBoard();
+				drawS_P_GameBoard_without_cls();
 				if (letter >= 'A' && letter <= 'J') {
 					if (klaida_used == true) {
 						cout << RED << "INVALID - USED COORDINATE" << RESET << endl << endl;
@@ -1247,7 +1222,7 @@ public:
 				ShowConsoleCursor(false);
 				ClearScreen();
 				drawS_P_title();
-				drawS_P_GameBoard();
+				drawS_P_GameBoard_without_cls();
 				if (letter >= 'A' && letter <= 'J') {
 					if (klaida_used == true) {
 						cout << RED << "INVALID - USED COORDINATE" << RESET << endl << endl;
@@ -1255,12 +1230,14 @@ public:
 					}
 					else {
 						cout << GREEN << "HIT shot! " << RESET << endl << endl;
-
+						ships_count--;
 						S_P_score = S_P_score + 100;
 					}
 				}
 				else cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
-				
+				if (ships_count == 0) {
+					S_P_Victory(); break;
+				}
 				validInput = false;
 				score_table();
 			}
@@ -1271,7 +1248,24 @@ public:
 	{
 		cout << BLUE << "Score: " << S_P_score << RESET << endl;
 		cout << BLUE << "Last taken shot: " << letter << " " << number << RESET << endl;
-		cout << BLUE << "Remaining ships: " << ships_count << RESET << endl;
+		cout << BLUE << "Remaining ship's parts: " << ships_count << RESET << endl;
+	}
+
+	const void S_P_Victory()
+	{
+		system("cls");
+		drawS_P_title();
+		cout << YELLOW << "                   *****************************************************************" << RESET << endl;
+		cout << YELLOW << "                  ** " << RESET << CYAN << "##   ##  ##  #######  ########  #######  #######  ##    ##  ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "                  ** " << RESET << GREEN << "##   ##  ##  ##          ##     ##   ##  ##   ##   ##  ##   ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "                  ** " << RESET << RED << "##   ##  ##  ##          ##     ##   ##  #####       ##     ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "                  ** " << RESET << GREEN << " ## ##   ##  ##          ##     ##   ##  ##  ##      ##       " << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "                  ** " << RESET << CYAN << "   #     ##  #######     ##     #######  ##   ##     ##     ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "                   ******************************************************************" << RESET << endl << endl;
+
+		cout << GREY << "|" << RED << S_name << "'s" GREY << "|" << ORANGE << " GAME RESULTS: " << endl << endl;
+		cout << BLUE << "Score: " << S_P_score << RESET << endl;
+		cout << BLUE << "SUNKED ship's parts: 20" << RESET << endl;
 	}
 
 };
@@ -1485,9 +1479,6 @@ void directionsSinglePlayerGameMenu()
 	}
 
 	single.S_P_Shooting();
-
-
-
 
 }
 
