@@ -6,6 +6,9 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <ctype.h>
+#include <sstream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -406,14 +409,26 @@ class SinglePlayerC : public BASE_S_M_Player
 {
 private:
 	string S_name;
-	bool test_1, test_2, test_3, test_4, validInput, validas;
+	bool test_1, test_2, test_3, test_4, validInput, validas, klaida_used;
 	int test_count, selectedTest;
 	char letter;
 	int number, letter_number;
 	int S_P_score, ships_count;
+	string letter_to_str, number_to_str, letter_number_str;
+	string ship_coord_nmb_to_str, ship_coord_ltr_to_str, ship_coord_nmb_ltr_to_str;
+	set <string> SHIP4_coords;
+	set <string> SHIP3_coords_1;
+	set <string> SHIP3_coords_2;
+	set <string> SHIP2_coords_1;
+	set <string> SHIP2_coords_2;
+	set <string> SHIP2_coords_3;
+	set <string> SHIP1_coords_1;
+	set <string> SHIP1_coords_2;
+	set <string> SHIP1_coords_3;
+	set <string> SHIP1_coords_4;
 public:
-	SinglePlayerC() : S_name(" "), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(0) {}
-	SinglePlayerC(string x) : S_name(x), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(0) {}
+	SinglePlayerC() : S_name(" "), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(10), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ship_coord_nmb_to_str(" "), ship_coord_ltr_to_str(" "), ship_coord_nmb_ltr_to_str(" ") {}
+	SinglePlayerC(string x) : S_name(x), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(10), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ship_coord_nmb_to_str(" "), ship_coord_ltr_to_str(" "), ship_coord_nmb_ltr_to_str(" ") {}
 	~SinglePlayerC() {}
 	void drawLoading_S_P_GameBoard()
 	{
@@ -608,24 +623,99 @@ public:
 		}
 
 		if (selectedTest == 0) {
+
 			SPlayerBoard_second[Y][X + 1] = 'S';
 			SPlayerBoard_second[Y][X + 2] = 'S';
 			SPlayerBoard_second[Y][X + 3] = 'S';
+
+			ship_coord_ltr_to_str = to_string(Y);
+			ship_coord_nmb_to_str = to_string(X);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_nmb_to_str = to_string(X + 1);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_nmb_to_str = to_string(X + 2);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_nmb_to_str = to_string(X + 3);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
 		}
 		if (selectedTest == 1) {
+
 			SPlayerBoard_second[Y + 1][X] = 'S';
 			SPlayerBoard_second[Y + 2][X] = 'S';
 			SPlayerBoard_second[Y + 3][X] = 'S';
+
+			ship_coord_ltr_to_str = to_string(Y);
+			ship_coord_nmb_to_str = to_string(X);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_ltr_to_str = to_string(Y + 1);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_ltr_to_str = to_string(Y + 2);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_ltr_to_str = to_string(Y + 3);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
 		}
 		if (selectedTest == 2) {
+
 			SPlayerBoard_second[Y][X - 1] = 'S';
 			SPlayerBoard_second[Y][X - 2] = 'S';
 			SPlayerBoard_second[Y][X - 3] = 'S';
+
+			ship_coord_ltr_to_str = to_string(Y);
+			ship_coord_nmb_to_str = to_string(X);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_nmb_to_str = to_string(X - 1);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_nmb_to_str = to_string(X - 2);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_nmb_to_str = to_string(X - 3);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
 		}
 		if (selectedTest == 3) {
+
 			SPlayerBoard_second[Y - 1][X] = 'S';
 			SPlayerBoard_second[Y - 2][X] = 'S';
 			SPlayerBoard_second[Y - 3][X] = 'S';
+
+			ship_coord_ltr_to_str = to_string(Y);
+			ship_coord_nmb_to_str = to_string(X);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_ltr_to_str = to_string(Y - 1);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_ltr_to_str = to_string(Y - 2);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
+			ship_coord_ltr_to_str = to_string(Y - 3);
+			ship_coord_nmb_ltr_to_str = ship_coord_ltr_to_str + ship_coord_nmb_to_str;
+			SHIP4_coords.insert(ship_coord_nmb_ltr_to_str);
+
 		}
 	}
 
@@ -1066,6 +1156,7 @@ public:
 	void S_P_Shooting()
 	{
 
+		set <string> used_c;
 		map <char, int> koordinate = {
 			{'A', 0}, {'A', 1}, {'A', 2}, {'A', 3}, {'A', 4}, {'A', 5}, {'A', 6}, {'A', 7}, {'A', 8}, {'A', 9},
 			{'B', 0}, {'B', 1}, {'B', 2}, {'B', 3}, {'B', 4}, {'B', 5}, {'B', 6}, {'B', 7}, {'B', 8}, {'B', 9},
@@ -1089,6 +1180,14 @@ public:
 			cin >> letter >> number;
 			cout << RESET;
 			letter = toupper(letter);
+
+			number_to_str = to_string(number);
+			letter_to_str = string(1, letter);
+			letter_number_str = letter_to_str + number_to_str;
+
+			if (used_c.find(letter_number_str) != used_c.end()) klaida_used = true;
+
+			used_c.insert(letter_number_str);
 				
 			try
 			{
@@ -1123,14 +1222,20 @@ public:
 
 			if (SPlayerBoard_second[number][letter_number] == '#' || SPlayerBoard_second[number][letter_number] == '-') {
 				cout << endl;
-				SPlayerBoard[number][letter_number] = 'O';
+				if (letter >= 'A' && letter <= 'J') SPlayerBoard[number][letter_number] = 'O';
 				ShowConsoleCursor(false);
 				ClearScreen();
 				drawS_P_title();
 				drawS_P_GameBoard();
 				if (letter >= 'A' && letter <= 'J') {
-					cout << RED << "MISSED shot! " << RESET << endl << endl;
-					S_P_score = S_P_score - 100;
+					if (klaida_used == true) {
+						cout << RED << "INVALID - USED COORDINATE" << RESET << endl << endl;
+						klaida_used = false;
+					}
+					else {
+						cout << RED << "MISSED shot! " << RESET << endl << endl;
+						S_P_score = S_P_score - 100;
+					}
 				}
 				else cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
 				validInput = false;
@@ -1138,13 +1243,24 @@ public:
 			}
 			else {
 				cout << endl;
-				SPlayerBoard[number][letter_number] = 'X';
+				if (letter >= 'A' && letter <= 'J') SPlayerBoard[number][letter_number] = 'X';
 				ShowConsoleCursor(false);
 				ClearScreen();
 				drawS_P_title();
 				drawS_P_GameBoard();
-				cout << GREEN << "HIT shot! " << RESET << endl << endl;
-				S_P_score = S_P_score + 100;
+				if (letter >= 'A' && letter <= 'J') {
+					if (klaida_used == true) {
+						cout << RED << "INVALID - USED COORDINATE" << RESET << endl << endl;
+						klaida_used = false;
+					}
+					else {
+						cout << GREEN << "HIT shot! " << RESET << endl << endl;
+
+						S_P_score = S_P_score + 100;
+					}
+				}
+				else cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+				
 				validInput = false;
 				score_table();
 			}
@@ -1155,6 +1271,7 @@ public:
 	{
 		cout << BLUE << "Score: " << S_P_score << RESET << endl;
 		cout << BLUE << "Last taken shot: " << letter << " " << number << RESET << endl;
+		cout << BLUE << "Remaining ships: " << ships_count << RESET << endl;
 	}
 
 };
