@@ -1411,10 +1411,9 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 	void generate_N_P_SHIPS()
 	{
 		generateN_P_4SHIP();
-
-	
-
-		
+		generateN_P_3SHIP();
+		generateN_P_2SHIP();
+		generateN_P_1SHIP();
 	}
 
 	void generateN_P_4SHIP()
@@ -1880,7 +1879,10 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				}
 			}
 		}
-		
+
+		P_can_c.clear();
+		PvalidInput = false;
+
 		SHIP_zone();
 		ShowConsoleCursor(false);
 		system("cls");
@@ -1888,6 +1890,942 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 		drawN_P_GameBoard();
 		P_table();
 
+	}
+
+	void generateN_P_3SHIP()
+	{
+		map <char, int> Pkoordinate = {
+			{'A', 0}, {'A', 1}, {'A', 2}, {'A', 3}, {'A', 4}, {'A', 5}, {'A', 6}, {'A', 7}, {'A', 8}, {'A', 9},
+			{'B', 0}, {'B', 1}, {'B', 2}, {'B', 3}, {'B', 4}, {'B', 5}, {'B', 6}, {'B', 7}, {'B', 8}, {'B', 9},
+			{'C', 0}, {'C', 1}, {'C', 2}, {'C', 3}, {'C', 4}, {'C', 5}, {'C', 6}, {'C', 7}, {'C', 8}, {'C', 9},
+			{'D', 0}, {'D', 1}, {'D', 2}, {'D', 3}, {'D', 4}, {'D', 5}, {'D', 6}, {'D', 7}, {'D', 8}, {'D', 9},
+			{'E', 0}, {'E', 1}, {'E', 2}, {'E', 3}, {'E', 4}, {'E', 5}, {'E', 6}, {'E', 7}, {'E', 8}, {'E', 9},
+			{'F', 0}, {'F', 1}, {'F', 2}, {'F', 3}, {'F', 4}, {'F', 5}, {'F', 6}, {'F', 7}, {'F', 8}, {'F', 9},
+			{'G', 0}, {'G', 1}, {'G', 2}, {'G', 3}, {'G', 4}, {'G', 5}, {'G', 6}, {'G', 7}, {'G', 8}, {'G', 9},
+			{'H', 0}, {'H', 1}, {'H', 2}, {'H', 3}, {'H', 4}, {'H', 5}, {'H', 6}, {'H', 7}, {'H', 8}, {'H', 9},
+			{'I', 0}, {'I', 1}, {'I', 2}, {'I', 3}, {'I', 4}, {'I', 5}, {'I', 6}, {'I', 7}, {'I', 8}, {'I', 9},
+			{'J', 0}, {'J', 1}, {'J', 2}, {'J', 3}, {'J', 4}, {'J', 5}, {'J', 6}, {'J', 7}, {'J', 8}, {'J', 9},
+		};
+
+		while (!PvalidInput)
+		{
+			cout << endl;
+			cout << BROWN << "{1} SSS" << GREY << " - COORDINATES" << RESET << endl << endl;
+			cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+			cout << GREY << "(1) ENTER coordinate of " << BROWN << "|SSS| " << GREY << "ship: ";
+
+			cout << RED;
+
+			cin >> P_letter >> P_number;
+			cout << RESET;
+
+			P_letter = toupper(P_letter);
+
+			if (P_letter == 'A') P_letter_number = 0;
+			if (P_letter == 'B') P_letter_number = 1;
+			if (P_letter == 'C') P_letter_number = 2;
+			if (P_letter == 'D') P_letter_number = 3;
+			if (P_letter == 'E') P_letter_number = 4;
+			if (P_letter == 'F') P_letter_number = 5;
+			if (P_letter == 'G') P_letter_number = 6;
+			if (P_letter == 'H') P_letter_number = 7;
+			if (P_letter == 'I') P_letter_number = 8;
+			if (P_letter == 'J') P_letter_number = 9;
+
+			try
+			{
+				if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+					PvalidInput = true;
+					Pvalidas = true;
+					throw "You entered valid coordinates!";
+				}
+				else {
+					Pvalidas = false;
+					throw "Invalid coordinates, please try again.";
+				}
+				
+			}
+
+			catch (const char* message)
+			{
+				if (Pvalidas == true) {
+					cout << GREEN << message << RESET;
+					Sleep(800);
+					N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+				}
+				else {
+					cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+					Sleep(800);
+					ShowConsoleCursor(false);
+					system("cls");
+					drawA_I_title();
+					drawN_P_GameBoard();
+					cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+					P_table();
+				}
+			}
+		}
+
+		if (P_letter_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number + 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		if (P_letter_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number - 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		if (P_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number + 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		if (P_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number - 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		PvalidInput = false;
+
+		while (!PvalidInput)
+		{
+			ShowConsoleCursor(false);
+			system("cls");
+			drawA_I_title();
+			drawN_P_GameBoard();
+			if (Pvalidas == false) cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+			Pvalidas = false;
+			P_table();
+
+			cout << endl;
+			cout << BROWN << "{1} SSS" << GREY << " - COORDINATES" << RESET << endl << endl;
+			cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+			cout << GREY << "(2) ENTER coordinate of " << BROWN << "|SSS| " << GREY << "ship: ";
+
+			cout << RED;
+			cin >> P_letter >> P_number;
+			cout << RESET;
+
+			P_letter = toupper(P_letter);
+
+			if (P_letter == 'A') P_letter_number = 0;
+			if (P_letter == 'B') P_letter_number = 1;
+			if (P_letter == 'C') P_letter_number = 2;
+			if (P_letter == 'D') P_letter_number = 3;
+			if (P_letter == 'E') P_letter_number = 4;
+			if (P_letter == 'F') P_letter_number = 5;
+			if (P_letter == 'G') P_letter_number = 6;
+			if (P_letter == 'H') P_letter_number = 7;
+			if (P_letter == 'I') P_letter_number = 8;
+			if (P_letter == 'J') P_letter_number = 9;
+
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+
+			if (P_can_c.find(P_letter_number_str) == P_can_c.end()) P_klaida_cant = true;
+
+			try
+			{
+				if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+					if (P_klaida_cant == true) PvalidInput = false;
+					else PvalidInput = true;
+					Pvalidas = true;
+					throw "You entered valid coordinates!";
+				}
+				else {
+					Pvalidas = false;
+					throw "Invalid coordinates, please try again.";
+				}
+			}
+
+			catch (const char* message)
+			{
+				if (Pvalidas == true && P_klaida_cant == false) {
+					cout << GREEN << message << RESET;
+					Sleep(800);
+					N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+				}
+				else {
+					if (P_klaida_cant == true) P_klaida_cant = false;
+					cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+					Sleep(800);
+					ShowConsoleCursor(false);
+					system("cls");
+					drawA_I_title();
+					drawN_P_GameBoard();
+					cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+					P_table();
+				}
+			}
+		}
+
+		P_can_c.clear();
+
+		if (P_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number - 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_number + 2 < 10)
+			{
+				P_number_to_str = to_string(P_number + 2);
+				P_letter_to_str = string(1, P_letter_number);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		if (P_letter_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number + 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_letter_number - 2 >= 0)
+			{
+				P_number_to_str = to_string(P_number);
+				P_letter_to_str = string(1, P_letter_number - 2);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		if (P_letter_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number - 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_letter_number + 2 < 10)
+			{
+				P_number_to_str = to_string(P_number);
+				P_letter_to_str = string(1, P_letter_number + 2);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		if (P_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number + 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_number - 2 >= 0)
+			{
+				P_number_to_str = to_string(P_number - 2);
+				P_letter_to_str = string(1, P_letter_number);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		PvalidInput = false;
+
+		while (!PvalidInput)
+		{
+			ShowConsoleCursor(false);
+			system("cls");
+			drawA_I_title();
+			drawN_P_GameBoard();
+			if (Pvalidas == false) cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+			Pvalidas = false;
+			P_table();
+
+			cout << endl;
+			cout << BROWN << "{1} SSS" << GREY << " - COORDINATES" << RESET << endl << endl;
+			cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+			cout << GREY << "(3) ENTER coordinate of " << BROWN << "|SSS| " << GREY << "ship: ";
+
+			cout << RED;
+			cin >> P_letter >> P_number;
+			cout << RESET;
+
+			P_letter = toupper(P_letter);
+
+			if (P_letter == 'A') P_letter_number = 0;
+			if (P_letter == 'B') P_letter_number = 1;
+			if (P_letter == 'C') P_letter_number = 2;
+			if (P_letter == 'D') P_letter_number = 3;
+			if (P_letter == 'E') P_letter_number = 4;
+			if (P_letter == 'F') P_letter_number = 5;
+			if (P_letter == 'G') P_letter_number = 6;
+			if (P_letter == 'H') P_letter_number = 7;
+			if (P_letter == 'I') P_letter_number = 8;
+			if (P_letter == 'J') P_letter_number = 9;
+
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+
+			if (P_can_c.find(P_letter_number_str) == P_can_c.end()) P_klaida_cant = true;
+
+			try
+			{
+				if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+					if (P_klaida_cant == true) PvalidInput = false;
+					else PvalidInput = true;
+					Pvalidas = true;
+					throw "You entered valid coordinates!";
+				}
+				else {
+					Pvalidas = false;
+					throw "Invalid coordinates, please try again.";
+				}
+			}
+
+			catch (const char* message)
+			{
+				if (Pvalidas == true && P_klaida_cant == false) {
+					cout << GREEN << message << RESET;
+					Sleep(800);
+					N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+				}
+				else {
+					if (P_klaida_cant == true) P_klaida_cant = false;
+					cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+					Sleep(800);
+					ShowConsoleCursor(false);
+					system("cls");
+					drawA_I_title();
+					drawN_P_GameBoard();
+					cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+					P_table();
+				}
+			}
+		}
+
+		P_can_c.clear();
+		PvalidInput = false;
+
+		SHIP_zone();
+		ShowConsoleCursor(false);
+		system("cls");
+		drawA_I_title();
+		drawN_P_GameBoard();
+		P_table();
+
+		while (!PvalidInput)
+		{
+			cout << endl;
+			cout << BROWN << "{1} SSS" << GREY << " - COORDINATES" << RESET << endl << endl;
+			cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+			cout << GREY << "(1) ENTER coordinate of " << BROWN << "|SSS| " << GREY << "ship: ";
+
+			cout << RED;
+			cin >> P_letter >> P_number;
+			cout << RESET;
+
+			P_letter = toupper(P_letter);
+
+			if (P_letter == 'A') P_letter_number = 0;
+			if (P_letter == 'B') P_letter_number = 1;
+			if (P_letter == 'C') P_letter_number = 2;
+			if (P_letter == 'D') P_letter_number = 3;
+			if (P_letter == 'E') P_letter_number = 4;
+			if (P_letter == 'F') P_letter_number = 5;
+			if (P_letter == 'G') P_letter_number = 6;
+			if (P_letter == 'H') P_letter_number = 7;
+			if (P_letter == 'I') P_letter_number = 8;
+			if (P_letter == 'J') P_letter_number = 9;
+
+			try
+			{
+				if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+					PvalidInput = true;
+					Pvalidas = true;
+					throw "You entered valid coordinates!";
+				}
+				else {
+					Pvalidas = false;
+					throw "Invalid coordinates, please try again.";
+				}
+
+			}
+
+			catch (const char* message)
+			{
+				if (Pvalidas == true) {
+					cout << GREEN << message << RESET;
+					Sleep(800);
+					N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+				}
+				else {
+					cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+					Sleep(800);
+					ShowConsoleCursor(false);
+					system("cls");
+					drawA_I_title();
+					drawN_P_GameBoard();
+					cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+					P_table();
+				}
+			}
+		}
+
+		if (P_letter_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number + 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		if (P_letter_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number - 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		if (P_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number + 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		if (P_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number - 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+		}
+
+		PvalidInput = false;
+
+		while (!PvalidInput)
+		{
+			ShowConsoleCursor(false);
+			system("cls");
+			drawA_I_title();
+			drawN_P_GameBoard();
+			if (Pvalidas == false) cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+			Pvalidas = false;
+			P_table();
+
+			cout << endl;
+			cout << BROWN << "{2} SSS" << GREY << " - COORDINATES" << RESET << endl << endl;
+			cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+			cout << GREY << "(2) ENTER coordinate of " << BROWN << "|SSS| " << GREY << "ship: ";
+
+			cout << RED;
+			cin >> P_letter >> P_number;
+			cout << RESET;
+
+			P_letter = toupper(P_letter);
+
+			if (P_letter == 'A') P_letter_number = 0;
+			if (P_letter == 'B') P_letter_number = 1;
+			if (P_letter == 'C') P_letter_number = 2;
+			if (P_letter == 'D') P_letter_number = 3;
+			if (P_letter == 'E') P_letter_number = 4;
+			if (P_letter == 'F') P_letter_number = 5;
+			if (P_letter == 'G') P_letter_number = 6;
+			if (P_letter == 'H') P_letter_number = 7;
+			if (P_letter == 'I') P_letter_number = 8;
+			if (P_letter == 'J') P_letter_number = 9;
+
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+
+			if (P_can_c.find(P_letter_number_str) == P_can_c.end()) P_klaida_cant = true;
+
+			try
+			{
+				if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+					if (P_klaida_cant == true) PvalidInput = false;
+					else PvalidInput = true;
+					Pvalidas = true;
+					throw "You entered valid coordinates!";
+				}
+				else {
+					Pvalidas = false;
+					throw "Invalid coordinates, please try again.";
+				}
+			}
+
+			catch (const char* message)
+			{
+				if (Pvalidas == true && P_klaida_cant == false) {
+					cout << GREEN << message << RESET;
+					Sleep(800);
+					N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+				}
+				else {
+					if (P_klaida_cant == true) P_klaida_cant = false;
+					cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+					Sleep(800);
+					ShowConsoleCursor(false);
+					system("cls");
+					drawA_I_title();
+					drawN_P_GameBoard();
+					cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+					P_table();
+				}
+			}
+		}
+
+		P_can_c.clear();
+
+		if (P_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number - 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_number + 2 < 10)
+			{
+				P_number_to_str = to_string(P_number + 2);
+				P_letter_to_str = string(1, P_letter_number);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		if (P_letter_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number + 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_letter_number - 2 >= 0)
+			{
+				P_number_to_str = to_string(P_number);
+				P_letter_to_str = string(1, P_letter_number - 2);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		if (P_letter_number - 1 >= 0)
+		{
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number - 1);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_letter_number + 2 < 10)
+			{
+				P_number_to_str = to_string(P_number);
+				P_letter_to_str = string(1, P_letter_number + 2);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		if (P_number + 1 < 10)
+		{
+			P_number_to_str = to_string(P_number + 1);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+			P_can_c.insert(P_letter_number_str);
+
+			if (P_number - 2 >= 0)
+			{
+				P_number_to_str = to_string(P_number - 2);
+				P_letter_to_str = string(1, P_letter_number);
+				P_letter_number_str = P_number_to_str + P_letter_to_str;
+				P_can_c.insert(P_letter_number_str);
+			}
+		}
+
+		PvalidInput = false;
+
+		while (!PvalidInput)
+		{
+			ShowConsoleCursor(false);
+			system("cls");
+			drawA_I_title();
+			drawN_P_GameBoard();
+			if (Pvalidas == false) cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+			Pvalidas = false;
+			P_table();
+
+			cout << endl;
+			cout << BROWN << "{2} SSS" << GREY << " - COORDINATES" << RESET << endl << endl;
+			cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+			cout << GREY << "(3) ENTER coordinate of " << BROWN << "|SSS| " << GREY << "ship: ";
+
+			cout << RED;
+			cin >> P_letter >> P_number;
+			cout << RESET;
+
+			P_letter = toupper(P_letter);
+
+			if (P_letter == 'A') P_letter_number = 0;
+			if (P_letter == 'B') P_letter_number = 1;
+			if (P_letter == 'C') P_letter_number = 2;
+			if (P_letter == 'D') P_letter_number = 3;
+			if (P_letter == 'E') P_letter_number = 4;
+			if (P_letter == 'F') P_letter_number = 5;
+			if (P_letter == 'G') P_letter_number = 6;
+			if (P_letter == 'H') P_letter_number = 7;
+			if (P_letter == 'I') P_letter_number = 8;
+			if (P_letter == 'J') P_letter_number = 9;
+
+			P_number_to_str = to_string(P_number);
+			P_letter_to_str = string(1, P_letter_number);
+			P_letter_number_str = P_number_to_str + P_letter_to_str;
+
+			if (P_can_c.find(P_letter_number_str) == P_can_c.end()) P_klaida_cant = true;
+
+			try
+			{
+				if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+					if (P_klaida_cant == true) PvalidInput = false;
+					else PvalidInput = true;
+					Pvalidas = true;
+					throw "You entered valid coordinates!";
+				}
+				else {
+					Pvalidas = false;
+					throw "Invalid coordinates, please try again.";
+				}
+			}
+
+			catch (const char* message)
+			{
+				if (Pvalidas == true && P_klaida_cant == false) {
+					cout << GREEN << message << RESET;
+					Sleep(800);
+					N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+				}
+				else {
+					if (P_klaida_cant == true) P_klaida_cant = false;
+					cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+					Sleep(800);
+					ShowConsoleCursor(false);
+					system("cls");
+					drawA_I_title();
+					drawN_P_GameBoard();
+					cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+					P_table();
+				}
+			}
+		}
+
+		P_can_c.clear();
+		PvalidInput = false;
+
+		SHIP_zone();
+		ShowConsoleCursor(false);
+		system("cls");
+		drawA_I_title();
+		drawN_P_GameBoard();
+		P_table();
+
+	}
+
+	void generateN_P_2SHIP()
+	{
+		map <char, int> Pkoordinate = {
+			{'A', 0}, {'A', 1}, {'A', 2}, {'A', 3}, {'A', 4}, {'A', 5}, {'A', 6}, {'A', 7}, {'A', 8}, {'A', 9},
+			{'B', 0}, {'B', 1}, {'B', 2}, {'B', 3}, {'B', 4}, {'B', 5}, {'B', 6}, {'B', 7}, {'B', 8}, {'B', 9},
+			{'C', 0}, {'C', 1}, {'C', 2}, {'C', 3}, {'C', 4}, {'C', 5}, {'C', 6}, {'C', 7}, {'C', 8}, {'C', 9},
+			{'D', 0}, {'D', 1}, {'D', 2}, {'D', 3}, {'D', 4}, {'D', 5}, {'D', 6}, {'D', 7}, {'D', 8}, {'D', 9},
+			{'E', 0}, {'E', 1}, {'E', 2}, {'E', 3}, {'E', 4}, {'E', 5}, {'E', 6}, {'E', 7}, {'E', 8}, {'E', 9},
+			{'F', 0}, {'F', 1}, {'F', 2}, {'F', 3}, {'F', 4}, {'F', 5}, {'F', 6}, {'F', 7}, {'F', 8}, {'F', 9},
+			{'G', 0}, {'G', 1}, {'G', 2}, {'G', 3}, {'G', 4}, {'G', 5}, {'G', 6}, {'G', 7}, {'G', 8}, {'G', 9},
+			{'H', 0}, {'H', 1}, {'H', 2}, {'H', 3}, {'H', 4}, {'H', 5}, {'H', 6}, {'H', 7}, {'H', 8}, {'H', 9},
+			{'I', 0}, {'I', 1}, {'I', 2}, {'I', 3}, {'I', 4}, {'I', 5}, {'I', 6}, {'I', 7}, {'I', 8}, {'I', 9},
+			{'J', 0}, {'J', 1}, {'J', 2}, {'J', 3}, {'J', 4}, {'J', 5}, {'J', 6}, {'J', 7}, {'J', 8}, {'J', 9},
+		};
+
+
+		for (int i = 1; i < 4; i++)
+		{
+				while (!PvalidInput)
+				{
+					cout << endl;
+					cout << BROWN << "{" << i <<"} SS" << GREY << " - COORDINATES" << RESET << endl << endl;
+					cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+					cout << GREY << "(1) ENTER coordinate of" << BROWN << " |SS| " << GREY << "ship: ";
+
+					cout << RED;
+
+					cin >> P_letter >> P_number;
+					cout << RESET;
+
+					P_letter = toupper(P_letter);
+
+					if (P_letter == 'A') P_letter_number = 0;
+					if (P_letter == 'B') P_letter_number = 1;
+					if (P_letter == 'C') P_letter_number = 2;
+					if (P_letter == 'D') P_letter_number = 3;
+					if (P_letter == 'E') P_letter_number = 4;
+					if (P_letter == 'F') P_letter_number = 5;
+					if (P_letter == 'G') P_letter_number = 6;
+					if (P_letter == 'H') P_letter_number = 7;
+					if (P_letter == 'I') P_letter_number = 8;
+					if (P_letter == 'J') P_letter_number = 9;
+
+					try
+					{
+						if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+							PvalidInput = true;
+							Pvalidas = true;
+							throw "You entered valid coordinates!";
+						}
+						else {
+							Pvalidas = false;
+							throw "Invalid coordinates, please try again.";
+						}
+
+					}
+
+					catch (const char* message)
+					{
+						if (Pvalidas == true) {
+							cout << GREEN << message << RESET;
+							Sleep(800);
+							N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+						}
+						else {
+							cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+							Sleep(800);
+							ShowConsoleCursor(false);
+							system("cls");
+							drawA_I_title();
+							drawN_P_GameBoard();
+							cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+							P_table();
+						}
+					}
+				}
+
+				if (P_letter_number + 1 < 10)
+				{
+					P_number_to_str = to_string(P_number);
+					P_letter_to_str = string(1, P_letter_number + 1);
+					P_letter_number_str = P_number_to_str + P_letter_to_str;
+					P_can_c.insert(P_letter_number_str);
+				}
+
+				if (P_letter_number - 1 >= 0)
+				{
+					P_number_to_str = to_string(P_number);
+					P_letter_to_str = string(1, P_letter_number - 1);
+					P_letter_number_str = P_number_to_str + P_letter_to_str;
+					P_can_c.insert(P_letter_number_str);
+				}
+
+				if (P_number + 1 < 10)
+				{
+					P_number_to_str = to_string(P_number + 1);
+					P_letter_to_str = string(1, P_letter_number);
+					P_letter_number_str = P_number_to_str + P_letter_to_str;
+					P_can_c.insert(P_letter_number_str);
+				}
+
+				if (P_number - 1 >= 0)
+				{
+					P_number_to_str = to_string(P_number - 1);
+					P_letter_to_str = string(1, P_letter_number);
+					P_letter_number_str = P_number_to_str + P_letter_to_str;
+					P_can_c.insert(P_letter_number_str);
+				}
+
+				PvalidInput = false;
+
+				while (!PvalidInput)
+				{
+					ShowConsoleCursor(false);
+					system("cls");
+					drawA_I_title();
+					drawN_P_GameBoard();
+					if (Pvalidas == false) cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+					Pvalidas = false;
+					P_table();
+
+					cout << endl;
+					cout << BROWN << "{1} SS" << GREY << " - COORDINATES" << RESET << endl << endl;
+					cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+					cout << GREY << "(2) ENTER coordinate of" << BROWN << "|SS| " << GREY << "ship: ";
+
+					cout << RED;
+					cin >> P_letter >> P_number;
+					cout << RESET;
+
+					P_letter = toupper(P_letter);
+
+					if (P_letter == 'A') P_letter_number = 0;
+					if (P_letter == 'B') P_letter_number = 1;
+					if (P_letter == 'C') P_letter_number = 2;
+					if (P_letter == 'D') P_letter_number = 3;
+					if (P_letter == 'E') P_letter_number = 4;
+					if (P_letter == 'F') P_letter_number = 5;
+					if (P_letter == 'G') P_letter_number = 6;
+					if (P_letter == 'H') P_letter_number = 7;
+					if (P_letter == 'I') P_letter_number = 8;
+					if (P_letter == 'J') P_letter_number = 9;
+
+					P_number_to_str = to_string(P_number);
+					P_letter_to_str = string(1, P_letter_number);
+					P_letter_number_str = P_number_to_str + P_letter_to_str;
+
+					if (P_can_c.find(P_letter_number_str) == P_can_c.end()) P_klaida_cant = true;
+
+					try
+					{
+						if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+							if (P_klaida_cant == true) PvalidInput = false;
+							else PvalidInput = true;
+							Pvalidas = true;
+							throw "You entered valid coordinates!";
+						}
+						else {
+							Pvalidas = false;
+							throw "Invalid coordinates, please try again.";
+						}
+					}
+
+					catch (const char* message)
+					{
+						if (Pvalidas == true && P_klaida_cant == false) {
+							cout << GREEN << message << RESET;
+							Sleep(800);
+							N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+						}
+						else {
+							if (P_klaida_cant == true) P_klaida_cant = false;
+							cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+							Sleep(800);
+							ShowConsoleCursor(false);
+							system("cls");
+							drawA_I_title();
+							drawN_P_GameBoard();
+							cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+							P_table();
+						}
+					}
+				}
+
+				P_can_c.clear();
+				PvalidInput = false;
+
+				SHIP_zone();
+				ShowConsoleCursor(false);
+				system("cls");
+				drawA_I_title();
+				drawN_P_GameBoard();
+				P_table();
+			}
+		
+	}
+
+	void generateN_P_1SHIP()
+	{
+		map <char, int> Pkoordinate = {
+			{'A', 0}, {'A', 1}, {'A', 2}, {'A', 3}, {'A', 4}, {'A', 5}, {'A', 6}, {'A', 7}, {'A', 8}, {'A', 9},
+			{'B', 0}, {'B', 1}, {'B', 2}, {'B', 3}, {'B', 4}, {'B', 5}, {'B', 6}, {'B', 7}, {'B', 8}, {'B', 9},
+			{'C', 0}, {'C', 1}, {'C', 2}, {'C', 3}, {'C', 4}, {'C', 5}, {'C', 6}, {'C', 7}, {'C', 8}, {'C', 9},
+			{'D', 0}, {'D', 1}, {'D', 2}, {'D', 3}, {'D', 4}, {'D', 5}, {'D', 6}, {'D', 7}, {'D', 8}, {'D', 9},
+			{'E', 0}, {'E', 1}, {'E', 2}, {'E', 3}, {'E', 4}, {'E', 5}, {'E', 6}, {'E', 7}, {'E', 8}, {'E', 9},
+			{'F', 0}, {'F', 1}, {'F', 2}, {'F', 3}, {'F', 4}, {'F', 5}, {'F', 6}, {'F', 7}, {'F', 8}, {'F', 9},
+			{'G', 0}, {'G', 1}, {'G', 2}, {'G', 3}, {'G', 4}, {'G', 5}, {'G', 6}, {'G', 7}, {'G', 8}, {'G', 9},
+			{'H', 0}, {'H', 1}, {'H', 2}, {'H', 3}, {'H', 4}, {'H', 5}, {'H', 6}, {'H', 7}, {'H', 8}, {'H', 9},
+			{'I', 0}, {'I', 1}, {'I', 2}, {'I', 3}, {'I', 4}, {'I', 5}, {'I', 6}, {'I', 7}, {'I', 8}, {'I', 9},
+			{'J', 0}, {'J', 1}, {'J', 2}, {'J', 3}, {'J', 4}, {'J', 5}, {'J', 6}, {'J', 7}, {'J', 8}, {'J', 9},
+		};
+
+
+		for (int i = 1; i < 5; i++)
+		{
+			while (!PvalidInput)
+			{
+				cout << endl;
+				cout << BROWN << "{" << i << "} S" << GREY << " - COORDINATES" << RESET << endl << endl;
+				cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
+				cout << GREY << "(1) ENTER coordinate of" << BROWN << " |S| " << GREY << "ship: ";
+
+				cout << RED;
+
+				cin >> P_letter >> P_number;
+				cout << RESET;
+
+				P_letter = toupper(P_letter);
+
+				if (P_letter == 'A') P_letter_number = 0;
+				if (P_letter == 'B') P_letter_number = 1;
+				if (P_letter == 'C') P_letter_number = 2;
+				if (P_letter == 'D') P_letter_number = 3;
+				if (P_letter == 'E') P_letter_number = 4;
+				if (P_letter == 'F') P_letter_number = 5;
+				if (P_letter == 'G') P_letter_number = 6;
+				if (P_letter == 'H') P_letter_number = 7;
+				if (P_letter == 'I') P_letter_number = 8;
+				if (P_letter == 'J') P_letter_number = 9;
+
+				try
+				{
+					if (Pkoordinate.find(P_letter) != Pkoordinate.end() && P_number >= 0 && P_number < 10 && N_PlayerBoard_second[P_number][P_letter_number] != 'S' && N_PlayerBoard_second[P_number][P_letter_number] != '-') {
+						PvalidInput = true;
+						Pvalidas = true;
+						throw "You entered valid coordinates!";
+					}
+					else {
+						Pvalidas = false;
+						throw "Invalid coordinates, please try again.";
+					}
+
+				}
+
+				catch (const char* message)
+				{
+					if (Pvalidas == true) {
+						cout << GREEN << message << RESET;
+						Sleep(800);
+						N_PlayerBoard_second[P_number][P_letter_number] = 'S';
+					}
+					else {
+						cout << RED << message << " - " << ORANGE << P_letter << " " << P_number << RESET;
+						Sleep(800);
+						ShowConsoleCursor(false);
+						system("cls");
+						drawA_I_title();
+						drawN_P_GameBoard();
+						cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
+						P_table();
+					}
+				}
+			}
+
+			P_can_c.clear();
+			PvalidInput = false;
+
+			SHIP_zone();
+			ShowConsoleCursor(false);
+			system("cls");
+			drawA_I_title();
+			drawN_P_GameBoard();
+			P_table();
+		}
 	}
 
 	const void P_table()
