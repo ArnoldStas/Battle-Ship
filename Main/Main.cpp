@@ -2874,6 +2874,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 	void drawA_I_GameBoard()
 	{
 		system("cls");
+		//ClearScreen();
 
 		drawA_I_title();
 		cout << GREY << "                     " << " |" << RED << "AI's" << GREY << "| GAMEBOARD:                      " << RESET << endl << endl;
@@ -2913,35 +2914,42 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				A_Y_n = rand() % A_GameBoardSize;
 			} while (AI_PlayerBoard[A_Y_n][A_X_l] == 'O' || AI_PlayerBoard[A_Y_n][A_X_l] == 'X');
 
-			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S' && AI_PlayerBoard[A_Y_n][A_X_l] != 'X')
 			{
 				A_I_ships_count--;
+				A_I_score = A_I_score + 100;
+				if (A_I_ships_count == 0) A_I_Victory();
 				A_I_pataike();
 			}
-			else {
+			else if (AI_PlayerBoard[A_Y_n][A_X_l] != 'O') {
 				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-				cout << RED << "MISSED shot! " << RESET << endl << endl;
+				A_I_score = A_I_score - 100;
+				N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+				cout << RED << "MISS shot! " << RESET << endl << endl;
 			}
 
-			A_number = A_Y_n;
+			if (AI_PlayerBoard[A_Y_n][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l] != 'X')
+			{
+				A_number = A_Y_n;
 
-			if (A_X_l == 0) A_letter = 'A';
-			if (A_X_l == 1) A_letter = 'B';
-			if (A_X_l == 2) A_letter = 'C';
-			if (A_X_l == 3) A_letter = 'D';
-			if (A_X_l == 4) A_letter = 'E';
-			if (A_X_l == 5) A_letter = 'F';
-			if (A_X_l == 6) A_letter = 'G';
-			if (A_X_l == 7) A_letter = 'H';
-			if (A_X_l == 8) A_letter = 'I';
-			if (A_X_l == 9) A_letter = 'J';
+				if (A_X_l == 0) A_letter = 'A';
+				if (A_X_l == 1) A_letter = 'B';
+				if (A_X_l == 2) A_letter = 'C';
+				if (A_X_l == 3) A_letter = 'D';
+				if (A_X_l == 4) A_letter = 'E';
+				if (A_X_l == 5) A_letter = 'F';
+				if (A_X_l == 6) A_letter = 'G';
+				if (A_X_l == 7) A_letter = 'H';
+				if (A_X_l == 8) A_letter = 'I';
+				if (A_X_l == 9) A_letter = 'J';
 
-			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-			Sleep(2000);
+				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+				Sleep(2000);
 
-			A_I_steps++;
+				A_I_steps++;
 
-			drawA_I_GameBoard();
+				drawA_I_GameBoard();
+			}
 		}
 
 	}
@@ -2995,183 +3003,208 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 
 		if (A_X_l + 1 < 10) {
-			A_X_l = A_X_l + 1;
-
-			drawA_I_GameBoard();
-			A_I_shooting_stats();
-			A_I_steps++;
-
-			A_number = A_Y_n;
-
-			if (A_X_l == 0) A_letter = 'A';
-			if (A_X_l == 1) A_letter = 'B';
-			if (A_X_l == 2) A_letter = 'C';
-			if (A_X_l == 3) A_letter = 'D';
-			if (A_X_l == 4) A_letter = 'E';
-			if (A_X_l == 5) A_letter = 'F';
-			if (A_X_l == 6) A_letter = 'G';
-			if (A_X_l == 7) A_letter = 'H';
-			if (A_X_l == 8) A_letter = 'I';
-			if (A_X_l == 9) A_letter = 'J';
-
-			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			if (AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'X')
 			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-				A_I_ships_count--;
-				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-				eile_desine = true;
-				eile = true;
-				eile_is_desines = true;
-				cout << GREEN << "HIT shot! " << RESET << endl << endl;
+				A_X_l = A_X_l + 1;
+
+				drawA_I_GameBoard();
+				A_I_shooting_stats();
+				A_I_steps++;
+
+				A_number = A_Y_n;
+
+				if (A_X_l == 0) A_letter = 'A';
+				if (A_X_l == 1) A_letter = 'B';
+				if (A_X_l == 2) A_letter = 'C';
+				if (A_X_l == 3) A_letter = 'D';
+				if (A_X_l == 4) A_letter = 'E';
+				if (A_X_l == 5) A_letter = 'F';
+				if (A_X_l == 6) A_letter = 'G';
+				if (A_X_l == 7) A_letter = 'H';
+				if (A_X_l == 8) A_letter = 'I';
+				if (A_X_l == 9) A_letter = 'J';
+
+				if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+					A_I_ships_count--;
+					A_I_score = A_I_score + 100;
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+					eile_desine = true;
+					eile = true;
+					eile_is_desines = true;
+					cout << GREEN << "HIT shot! " << RESET << endl << endl;
+				}
+				else
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+					A_I_score = A_I_score - 100;
+					eile_desine = false;
+					eile = false;
+					A_X_l = A_X_l - 1;
+					cout << RED << "MISS shot! " << RESET << endl << endl;
+				}
+
+				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+				Sleep(2000);
+				if (A_I_ships_count == 0) A_I_Victory();
+				drawA_I_GameBoard();
 			}
-			else
-			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-				eile_desine = false;
-				eile = false;
-				A_X_l = A_X_l - 1;
-				cout << RED << "MISSED shot! " << RESET << endl << endl;
-			}
-
-			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-			Sleep(2000);
-
-			drawA_I_GameBoard();
-
+			
 			if (eile_desine == true)
 			{
 				if (A_X_l + 1 < 10)
 				{
-					A_X_l = A_X_l + 1;
-
-					drawA_I_GameBoard();
-					A_I_shooting_stats();
-					A_I_steps++;
-
-					A_number = A_Y_n;
-
-					if (A_X_l == 0) A_letter = 'A';
-					if (A_X_l == 1) A_letter = 'B';
-					if (A_X_l == 2) A_letter = 'C';
-					if (A_X_l == 3) A_letter = 'D';
-					if (A_X_l == 4) A_letter = 'E';
-					if (A_X_l == 5) A_letter = 'F';
-					if (A_X_l == 6) A_letter = 'G';
-					if (A_X_l == 7) A_letter = 'H';
-					if (A_X_l == 8) A_letter = 'I';
-					if (A_X_l == 9) A_letter = 'J';
-
-					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					if (AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'X')
 					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-						A_I_ships_count--;
-						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-						eile_desine = true;
-						eile = true;
-						cout << GREEN << "HIT shot! " << RESET << endl << endl;
+						A_X_l = A_X_l + 1;
+
+						drawA_I_GameBoard();
+						A_I_shooting_stats();
+						A_I_steps++;
+
+						A_number = A_Y_n;
+
+						if (A_X_l == 0) A_letter = 'A';
+						if (A_X_l == 1) A_letter = 'B';
+						if (A_X_l == 2) A_letter = 'C';
+						if (A_X_l == 3) A_letter = 'D';
+						if (A_X_l == 4) A_letter = 'E';
+						if (A_X_l == 5) A_letter = 'F';
+						if (A_X_l == 6) A_letter = 'G';
+						if (A_X_l == 7) A_letter = 'H';
+						if (A_X_l == 8) A_letter = 'I';
+						if (A_X_l == 9) A_letter = 'J';
+
+						if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+							A_I_ships_count--;
+							A_I_score = A_I_score + 100;
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+							eile_desine = true;
+							eile = true;
+							cout << GREEN << "HIT shot! " << RESET << endl << endl;
+						}
+						else
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+							A_I_score = A_I_score - 100;
+							eile_desine = false;
+							A_X_l = A_X_l - 2;
+							cout << RED << "MISS shot! " << RESET << endl << endl;
+						}
+
+						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+						Sleep(2000);
+						if (A_I_ships_count == 0) A_I_Victory();
+						drawA_I_GameBoard();
 					}
-					else
-					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-						eile_desine = false;
-						A_X_l = A_X_l - 2;
-						cout << RED << "MISSED shot! " << RESET << endl << endl;
-					}
-
-					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-					Sleep(2000);
-
-					drawA_I_GameBoard();
-
+					
 					if (eile_desine == true)
 					{
 						if (A_X_l + 1 < 10)
 						{
-							A_X_l = A_X_l + 1;
-
-							drawA_I_GameBoard();
-							A_I_shooting_stats();
-							A_I_steps++;
-
-							A_number = A_Y_n;
-
-							if (A_X_l == 0) A_letter = 'A';
-							if (A_X_l == 1) A_letter = 'B';
-							if (A_X_l == 2) A_letter = 'C';
-							if (A_X_l == 3) A_letter = 'D';
-							if (A_X_l == 4) A_letter = 'E';
-							if (A_X_l == 5) A_letter = 'F';
-							if (A_X_l == 6) A_letter = 'G';
-							if (A_X_l == 7) A_letter = 'H';
-							if (A_X_l == 8) A_letter = 'I';
-							if (A_X_l == 9) A_letter = 'J';
-
-							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							if (AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'X')
 							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-								A_I_ships_count--;
-								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-								eile_desine = true;
-								eile = true;
-								cout << GREEN << "HIT shot! " << RESET << endl << endl;
-							}
-							else
-							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-								eile_desine = false;
-								A_X_l = A_X_l - 3;
-								cout << RED << "MISSED shot! " << RESET << endl << endl;
-							}
+								A_X_l = A_X_l + 1;
 
-							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-							Sleep(2000);
+								drawA_I_GameBoard();
+								A_I_shooting_stats();
+								A_I_steps++;
 
-							drawA_I_GameBoard();
+								A_number = A_Y_n;
+
+								if (A_X_l == 0) A_letter = 'A';
+								if (A_X_l == 1) A_letter = 'B';
+								if (A_X_l == 2) A_letter = 'C';
+								if (A_X_l == 3) A_letter = 'D';
+								if (A_X_l == 4) A_letter = 'E';
+								if (A_X_l == 5) A_letter = 'F';
+								if (A_X_l == 6) A_letter = 'G';
+								if (A_X_l == 7) A_letter = 'H';
+								if (A_X_l == 8) A_letter = 'I';
+								if (A_X_l == 9) A_letter = 'J';
+
+								if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+									A_I_ships_count--;
+									A_I_score = A_I_score + 100;
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+									eile_desine = true;
+									eile = true;
+									cout << GREEN << "HIT shot! " << RESET << endl << endl;
+								}
+								else
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+									A_I_score = A_I_score - 100;
+									eile_desine = false;
+									A_X_l = A_X_l - 3;
+									cout << RED << "MISS shot! " << RESET << endl << endl;
+								}
+
+								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+								Sleep(2000);
+								if (A_I_ships_count == 0) A_I_Victory();
+								drawA_I_GameBoard();
+							}
 
 							if (eile_desine == true)
 							{
 								if (A_X_l + 1 < 10)
 								{
-									A_X_l = A_X_l + 1;
-
-									drawA_I_GameBoard();
-									A_I_shooting_stats();
-									A_I_steps++;
-
-									A_number = A_Y_n;
-
-									if (A_X_l == 0) A_letter = 'A';
-									if (A_X_l == 1) A_letter = 'B';
-									if (A_X_l == 2) A_letter = 'C';
-									if (A_X_l == 3) A_letter = 'D';
-									if (A_X_l == 4) A_letter = 'E';
-									if (A_X_l == 5) A_letter = 'F';
-									if (A_X_l == 6) A_letter = 'G';
-									if (A_X_l == 7) A_letter = 'H';
-									if (A_X_l == 8) A_letter = 'I';
-									if (A_X_l == 9) A_letter = 'J';
-
-									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									if (AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l + 1] != 'X')
 									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-										A_I_ships_count--;
-										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-										eile_desine = false;
-										eile = true;
-										cout << GREEN << "HIT shot! " << RESET << endl << endl;
-									}
-									else
-									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-										eile_desine = false;
-										A_X_l = A_X_l - 4;
-										cout << RED << "MISSED shot! " << RESET << endl << endl;
+										A_X_l = A_X_l + 1;
+
+										drawA_I_GameBoard();
+										A_I_shooting_stats();
+										A_I_steps++;
+
+										A_number = A_Y_n;
+
+										if (A_X_l == 0) A_letter = 'A';
+										if (A_X_l == 1) A_letter = 'B';
+										if (A_X_l == 2) A_letter = 'C';
+										if (A_X_l == 3) A_letter = 'D';
+										if (A_X_l == 4) A_letter = 'E';
+										if (A_X_l == 5) A_letter = 'F';
+										if (A_X_l == 6) A_letter = 'G';
+										if (A_X_l == 7) A_letter = 'H';
+										if (A_X_l == 8) A_letter = 'I';
+										if (A_X_l == 9) A_letter = 'J';
+
+										if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+											A_I_ships_count--;
+											A_I_score = A_I_score + 100;
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+											eile_desine = false;
+											eile = true;
+											cout << GREEN << "HIT shot! " << RESET << endl << endl;
+										}
+										else
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+											A_I_score = A_I_score - 100;
+											eile_desine = false;
+											A_X_l = A_X_l - 4;
+											cout << RED << "MISS shot! " << RESET << endl << endl;
+										}
+
+										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+										Sleep(2000);
+										if (A_I_ships_count == 0) A_I_Victory();
+										drawA_I_GameBoard();
 									}
 
-									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-									Sleep(2000);
-
-									drawA_I_GameBoard();
 								}
 								else
 								{
@@ -3197,188 +3230,209 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			eile = false;
 		}
 
-
-
-
-
 		if (A_X_l - 1 >= 0) {
-			A_X_l = A_X_l - 1;
-
-			drawA_I_GameBoard();
-			A_I_shooting_stats();
-			A_I_steps++;
-
-			A_number = A_Y_n;
-
-			if (A_X_l == 0) A_letter = 'A';
-			if (A_X_l == 1) A_letter = 'B';
-			if (A_X_l == 2) A_letter = 'C';
-			if (A_X_l == 3) A_letter = 'D';
-			if (A_X_l == 4) A_letter = 'E';
-			if (A_X_l == 5) A_letter = 'F';
-			if (A_X_l == 6) A_letter = 'G';
-			if (A_X_l == 7) A_letter = 'H';
-			if (A_X_l == 8) A_letter = 'I';
-			if (A_X_l == 9) A_letter = 'J';
-
-			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			if (AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'X')
 			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-				A_I_ships_count--;
-				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-				eile_kaire = true;
-				eile = true;
-				eile_is_kaires = true;
-				cout << GREEN << "HIT shot! " << RESET << endl << endl;
-			}
-			else
-			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-				eile_kaire = false;
-				eile = false;
-				A_X_l = A_X_l + 1;
-				cout << RED << "MISSED shot! " << RESET << endl << endl;
-			}
+				A_X_l = A_X_l - 1;
 
-			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-			Sleep(2000);
+				drawA_I_GameBoard();
+				A_I_shooting_stats();
+				A_I_steps++;
 
-			drawA_I_GameBoard();
+				A_number = A_Y_n;
+
+				if (A_X_l == 0) A_letter = 'A';
+				if (A_X_l == 1) A_letter = 'B';
+				if (A_X_l == 2) A_letter = 'C';
+				if (A_X_l == 3) A_letter = 'D';
+				if (A_X_l == 4) A_letter = 'E';
+				if (A_X_l == 5) A_letter = 'F';
+				if (A_X_l == 6) A_letter = 'G';
+				if (A_X_l == 7) A_letter = 'H';
+				if (A_X_l == 8) A_letter = 'I';
+				if (A_X_l == 9) A_letter = 'J';
+
+				if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+					A_I_ships_count--;
+					A_I_score = A_I_score + 100;
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+					eile_kaire = true;
+					eile = true;
+					eile_is_kaires = true;
+					cout << GREEN << "HIT shot! " << RESET << endl << endl;
+				}
+				else
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+					A_I_score = A_I_score - 100;
+					eile_kaire = false;
+					eile = false;
+					A_X_l = A_X_l + 1;
+					cout << RED << "MISS shot! " << RESET << endl << endl;
+				}
+
+				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+				Sleep(2000);
+				if (A_I_ships_count == 0) A_I_Victory();
+				drawA_I_GameBoard();
+			}
 
 			if (eile_kaire == true)
 			{
 				if (A_X_l - 1 >= 0)
 				{
-					A_X_l = A_X_l - 1;
-
-					drawA_I_GameBoard();
-					A_I_shooting_stats();
-					A_I_steps++;
-
-					A_number = A_Y_n;
-
-					if (A_X_l == 0) A_letter = 'A';
-					if (A_X_l == 1) A_letter = 'B';
-					if (A_X_l == 2) A_letter = 'C';
-					if (A_X_l == 3) A_letter = 'D';
-					if (A_X_l == 4) A_letter = 'E';
-					if (A_X_l == 5) A_letter = 'F';
-					if (A_X_l == 6) A_letter = 'G';
-					if (A_X_l == 7) A_letter = 'H';
-					if (A_X_l == 8) A_letter = 'I';
-					if (A_X_l == 9) A_letter = 'J';
-
-					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					if (AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'X')
 					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-						A_I_ships_count--;
-						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-						eile_kaire = true;
-						eile = true;
-						cout << GREEN << "HIT shot! " << RESET << endl << endl;
-					}
-					else
-					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-						eile_kaire = false;
-						A_X_l = A_X_l + 2;
-						cout << RED << "MISSED shot! " << RESET << endl << endl;
-					}
+						A_X_l = A_X_l - 1;
 
-					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-					Sleep(2000);
+						drawA_I_GameBoard();
+						A_I_shooting_stats();
+						A_I_steps++;
 
-					drawA_I_GameBoard();
+						A_number = A_Y_n;
+
+						if (A_X_l == 0) A_letter = 'A';
+						if (A_X_l == 1) A_letter = 'B';
+						if (A_X_l == 2) A_letter = 'C';
+						if (A_X_l == 3) A_letter = 'D';
+						if (A_X_l == 4) A_letter = 'E';
+						if (A_X_l == 5) A_letter = 'F';
+						if (A_X_l == 6) A_letter = 'G';
+						if (A_X_l == 7) A_letter = 'H';
+						if (A_X_l == 8) A_letter = 'I';
+						if (A_X_l == 9) A_letter = 'J';
+
+						if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+							A_I_ships_count--;
+							A_I_score = A_I_score + 100;
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+							eile_kaire = true;
+							eile = true;
+							cout << GREEN << "HIT shot! " << RESET << endl << endl;
+						}
+						else
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+							A_I_score = A_I_score - 100;
+							eile_kaire = false;
+							A_X_l = A_X_l + 2;
+							cout << RED << "MISS shot! " << RESET << endl << endl;
+						}
+
+						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+						Sleep(2000);
+						if (A_I_ships_count == 0) A_I_Victory();
+						drawA_I_GameBoard();
+					}
 
 					if (eile_kaire == true)
 					{
 						if (A_X_l - 1 >= 0)
 						{
-							A_X_l = A_X_l - 1;
-
-							drawA_I_GameBoard();
-							A_I_shooting_stats();
-							A_I_steps++;
-
-							A_number = A_Y_n;
-
-							if (A_X_l == 0) A_letter = 'A';
-							if (A_X_l == 1) A_letter = 'B';
-							if (A_X_l == 2) A_letter = 'C';
-							if (A_X_l == 3) A_letter = 'D';
-							if (A_X_l == 4) A_letter = 'E';
-							if (A_X_l == 5) A_letter = 'F';
-							if (A_X_l == 6) A_letter = 'G';
-							if (A_X_l == 7) A_letter = 'H';
-							if (A_X_l == 8) A_letter = 'I';
-							if (A_X_l == 9) A_letter = 'J';
-
-							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							if (AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'X')
 							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-								A_I_ships_count--;
-								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-								eile_kaire = true;
-								eile = true;
-								cout << GREEN << "HIT shot! " << RESET << endl << endl;
-							}
-							else
-							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-								eile_kaire = false;
-								A_X_l = A_X_l + 3;
-								cout << RED << "MISSED shot! " << RESET << endl << endl;
-							}
+								A_X_l = A_X_l - 1;
 
-							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-							Sleep(2000);
+								drawA_I_GameBoard();
+								A_I_shooting_stats();
+								A_I_steps++;
 
-							drawA_I_GameBoard();
+								A_number = A_Y_n;
+
+								if (A_X_l == 0) A_letter = 'A';
+								if (A_X_l == 1) A_letter = 'B';
+								if (A_X_l == 2) A_letter = 'C';
+								if (A_X_l == 3) A_letter = 'D';
+								if (A_X_l == 4) A_letter = 'E';
+								if (A_X_l == 5) A_letter = 'F';
+								if (A_X_l == 6) A_letter = 'G';
+								if (A_X_l == 7) A_letter = 'H';
+								if (A_X_l == 8) A_letter = 'I';
+								if (A_X_l == 9) A_letter = 'J';
+
+								if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+									A_I_ships_count--;
+									A_I_score = A_I_score + 100;
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+									eile_kaire = true;
+									eile = true;
+									cout << GREEN << "HIT shot! " << RESET << endl << endl;
+								}
+								else
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+									A_I_score = A_I_score - 100;
+									eile_kaire = false;
+									A_X_l = A_X_l + 3;
+									cout << RED << "MISS shot! " << RESET << endl << endl;
+								}
+
+								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+								Sleep(2000);
+								if (A_I_ships_count == 0) A_I_Victory();
+								drawA_I_GameBoard();
+							}
 
 							if (eile_kaire == true)
 							{
 								if (A_X_l - 1 >= 0)
 								{
-									A_X_l = A_X_l - 1;
-
-									drawA_I_GameBoard();
-									A_I_shooting_stats();
-									A_I_steps++;
-
-									A_number = A_Y_n;
-
-									if (A_X_l == 0) A_letter = 'A';
-									if (A_X_l == 1) A_letter = 'B';
-									if (A_X_l == 2) A_letter = 'C';
-									if (A_X_l == 3) A_letter = 'D';
-									if (A_X_l == 4) A_letter = 'E';
-									if (A_X_l == 5) A_letter = 'F';
-									if (A_X_l == 6) A_letter = 'G';
-									if (A_X_l == 7) A_letter = 'H';
-									if (A_X_l == 8) A_letter = 'I';
-									if (A_X_l == 9) A_letter = 'J';
-
-									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									if (AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l - 1] != 'X')
 									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-										A_I_ships_count--;
-										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-										eile_kaire = false;
-										eile = true;
-										cout << GREEN << "HIT shot! " << RESET << endl << endl;
-									}
-									else
-									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-										eile_kaire = false;
-										A_X_l = A_X_l + 4;
-										cout << RED << "MISSED shot! " << RESET << endl << endl;
-									}
+										A_X_l = A_X_l - 1;
 
-									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-									Sleep(2000);
+										drawA_I_GameBoard();
+										A_I_shooting_stats();
+										A_I_steps++;
 
-									drawA_I_GameBoard();
+										A_number = A_Y_n;
+
+										if (A_X_l == 0) A_letter = 'A';
+										if (A_X_l == 1) A_letter = 'B';
+										if (A_X_l == 2) A_letter = 'C';
+										if (A_X_l == 3) A_letter = 'D';
+										if (A_X_l == 4) A_letter = 'E';
+										if (A_X_l == 5) A_letter = 'F';
+										if (A_X_l == 6) A_letter = 'G';
+										if (A_X_l == 7) A_letter = 'H';
+										if (A_X_l == 8) A_letter = 'I';
+										if (A_X_l == 9) A_letter = 'J';
+
+										if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+											A_I_ships_count--;
+											A_I_score = A_I_score + 100;
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+											eile_kaire = false;
+											eile = true;
+											cout << GREEN << "HIT shot! " << RESET << endl << endl;
+										}
+										else
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+											A_I_score = A_I_score - 100;
+											eile_kaire = false;
+											A_X_l = A_X_l + 4;
+											cout << RED << "MISS shot! " << RESET << endl << endl;
+										}
+
+										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+										Sleep(2000);
+										if (A_I_ships_count == 0) A_I_Victory();
+										drawA_I_GameBoard();
+									}
+							
 								}
 								else
 								{
@@ -3403,200 +3457,211 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			eile_kaire = false;
 			eile = false;
 		}
-		
-
-
-
-
-
 
 		if (eile_is_desines == true || eile_is_kaires == true) A_I_shooting();
 
-
-
-
-
-
-
-
 		if (A_Y_n + 1 < 10) {
-			A_Y_n = A_Y_n + 1;
-
-			drawA_I_GameBoard();
-			A_I_shooting_stats();
-			A_I_steps++;
-
-			A_number = A_Y_n;
-
-			if (A_X_l == 0) A_letter = 'A';
-			if (A_X_l == 1) A_letter = 'B';
-			if (A_X_l == 2) A_letter = 'C';
-			if (A_X_l == 3) A_letter = 'D';
-			if (A_X_l == 4) A_letter = 'E';
-			if (A_X_l == 5) A_letter = 'F';
-			if (A_X_l == 6) A_letter = 'G';
-			if (A_X_l == 7) A_letter = 'H';
-			if (A_X_l == 8) A_letter = 'I';
-			if (A_X_l == 9) A_letter = 'J';
-
-			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			if (AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'X')
 			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-				A_I_ships_count--;
-				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-				stulpelis_apacia = true;
-				stulpelis = true;
-				stulpelis_is_apacios = true;
-				cout << GREEN << "HIT shot! " << RESET << endl << endl;
-			}
-			else
-			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-				stulpelis_apacia = false;
-				stulpelis = false;
-				A_Y_n = A_Y_n - 1;
-				cout << RED << "MISSED shot! " << RESET << endl << endl;
-			}
+				A_Y_n = A_Y_n + 1;
 
-			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-			Sleep(2000);
+				drawA_I_GameBoard();
+				A_I_shooting_stats();
+				A_I_steps++;
 
-			drawA_I_GameBoard();
+				A_number = A_Y_n;
+
+				if (A_X_l == 0) A_letter = 'A';
+				if (A_X_l == 1) A_letter = 'B';
+				if (A_X_l == 2) A_letter = 'C';
+				if (A_X_l == 3) A_letter = 'D';
+				if (A_X_l == 4) A_letter = 'E';
+				if (A_X_l == 5) A_letter = 'F';
+				if (A_X_l == 6) A_letter = 'G';
+				if (A_X_l == 7) A_letter = 'H';
+				if (A_X_l == 8) A_letter = 'I';
+				if (A_X_l == 9) A_letter = 'J';
+
+				if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+					A_I_ships_count--;
+					A_I_score = A_I_score + 100;
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+					stulpelis_apacia = true;
+					stulpelis = true;
+					stulpelis_is_apacios = true;
+					cout << GREEN << "HIT shot! " << RESET << endl << endl;
+				}
+				else
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+					A_I_score = A_I_score - 100;
+					stulpelis_apacia = false;
+					stulpelis = false;
+					A_Y_n = A_Y_n - 1;
+					cout << RED << "MISS shot! " << RESET << endl << endl;
+				}
+
+				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+				Sleep(2000);
+				if (A_I_ships_count == 0) A_I_Victory();
+				drawA_I_GameBoard();
+			}
 
 			if (stulpelis_apacia == true)
 			{
 				if (A_Y_n + 1 < 10)
 				{
-					A_Y_n = A_Y_n + 1;
-
-					drawA_I_GameBoard();
-					A_I_shooting_stats();
-					A_I_steps++;
-
-					A_number = A_Y_n;
-
-					if (A_X_l == 0) A_letter = 'A';
-					if (A_X_l == 1) A_letter = 'B';
-					if (A_X_l == 2) A_letter = 'C';
-					if (A_X_l == 3) A_letter = 'D';
-					if (A_X_l == 4) A_letter = 'E';
-					if (A_X_l == 5) A_letter = 'F';
-					if (A_X_l == 6) A_letter = 'G';
-					if (A_X_l == 7) A_letter = 'H';
-					if (A_X_l == 8) A_letter = 'I';
-					if (A_X_l == 9) A_letter = 'J';
-
-					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					if (AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'X')
 					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-						A_I_ships_count--;
-						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-						stulpelis_apacia = true;
-						stulpelis = true;
-						cout << GREEN << "HIT shot! " << RESET << endl << endl;
-					}
-					else
-					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-						stulpelis_apacia = false;
-						A_Y_n = A_Y_n - 2;
-						cout << RED << "MISSED shot! " << RESET << endl << endl;
-					}
+						A_Y_n = A_Y_n + 1;
 
-					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-					Sleep(2000);
+						drawA_I_GameBoard();
+						A_I_shooting_stats();
+						A_I_steps++;
 
-					drawA_I_GameBoard();
+						A_number = A_Y_n;
+
+						if (A_X_l == 0) A_letter = 'A';
+						if (A_X_l == 1) A_letter = 'B';
+						if (A_X_l == 2) A_letter = 'C';
+						if (A_X_l == 3) A_letter = 'D';
+						if (A_X_l == 4) A_letter = 'E';
+						if (A_X_l == 5) A_letter = 'F';
+						if (A_X_l == 6) A_letter = 'G';
+						if (A_X_l == 7) A_letter = 'H';
+						if (A_X_l == 8) A_letter = 'I';
+						if (A_X_l == 9) A_letter = 'J';
+
+						if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+							A_I_ships_count--;
+							A_I_score = A_I_score + 100;
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+							stulpelis_apacia = true;
+							stulpelis = true;
+							cout << GREEN << "HIT shot! " << RESET << endl << endl;
+						}
+						else
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+							A_I_score = A_I_score - 100;
+							stulpelis_apacia = false;
+							A_Y_n = A_Y_n - 2;
+							cout << RED << "MISS shot! " << RESET << endl << endl;
+						}
+
+						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+						Sleep(2000);
+						if (A_I_ships_count == 0) A_I_Victory();
+						drawA_I_GameBoard();
+					}
 
 					if (stulpelis_apacia == true)
 					{
 						if (A_Y_n + 1 < 10)
 						{
-							A_Y_n = A_Y_n + 1;
-
-							drawA_I_GameBoard();
-							A_I_shooting_stats();
-							A_I_steps++;
-
-							A_number = A_Y_n;
-
-							if (A_X_l == 0) A_letter = 'A';
-							if (A_X_l == 1) A_letter = 'B';
-							if (A_X_l == 2) A_letter = 'C';
-							if (A_X_l == 3) A_letter = 'D';
-							if (A_X_l == 4) A_letter = 'E';
-							if (A_X_l == 5) A_letter = 'F';
-							if (A_X_l == 6) A_letter = 'G';
-							if (A_X_l == 7) A_letter = 'H';
-							if (A_X_l == 8) A_letter = 'I';
-							if (A_X_l == 9) A_letter = 'J';
-
-							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							if (AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'X')
 							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-								A_I_ships_count--;
-								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-								stulpelis_apacia = true;
-								stulpelis = true;
-								cout << GREEN << "HIT shot! " << RESET << endl << endl;
-							}
-							else
-							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-								stulpelis_apacia = false;
-								A_Y_n = A_Y_n - 3;
-								cout << RED << "MISSED shot! " << RESET << endl << endl;
-							}
+								A_Y_n = A_Y_n + 1;
 
-							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-							Sleep(2000);
+								drawA_I_GameBoard();
+								A_I_shooting_stats();
+								A_I_steps++;
 
-							drawA_I_GameBoard();
+								A_number = A_Y_n;
+
+								if (A_X_l == 0) A_letter = 'A';
+								if (A_X_l == 1) A_letter = 'B';
+								if (A_X_l == 2) A_letter = 'C';
+								if (A_X_l == 3) A_letter = 'D';
+								if (A_X_l == 4) A_letter = 'E';
+								if (A_X_l == 5) A_letter = 'F';
+								if (A_X_l == 6) A_letter = 'G';
+								if (A_X_l == 7) A_letter = 'H';
+								if (A_X_l == 8) A_letter = 'I';
+								if (A_X_l == 9) A_letter = 'J';
+
+								if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+									A_I_ships_count--;
+									A_I_score = A_I_score + 100;
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+									stulpelis_apacia = true;
+									stulpelis = true;
+									cout << GREEN << "HIT shot! " << RESET << endl << endl;
+								}
+								else
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+									A_I_score = A_I_score - 100;
+									stulpelis_apacia = false;
+									A_Y_n = A_Y_n - 3;
+									cout << RED << "MISS shot! " << RESET << endl << endl;
+								}
+
+								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+								Sleep(2000);
+								if (A_I_ships_count == 0) A_I_Victory();
+								drawA_I_GameBoard();
+							}
 
 							if (stulpelis_apacia == true)
 							{
 								if (A_Y_n + 1 < 10)
 								{
-									A_Y_n = A_Y_n + 1;
-
-									drawA_I_GameBoard();
-									A_I_shooting_stats();
-									A_I_steps++;
-
-									A_number = A_Y_n;
-
-									if (A_X_l == 0) A_letter = 'A';
-									if (A_X_l == 1) A_letter = 'B';
-									if (A_X_l == 2) A_letter = 'C';
-									if (A_X_l == 3) A_letter = 'D';
-									if (A_X_l == 4) A_letter = 'E';
-									if (A_X_l == 5) A_letter = 'F';
-									if (A_X_l == 6) A_letter = 'G';
-									if (A_X_l == 7) A_letter = 'H';
-									if (A_X_l == 8) A_letter = 'I';
-									if (A_X_l == 9) A_letter = 'J';
-
-									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									if (AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n + 1][A_X_l] != 'X')
 									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-										A_I_ships_count--;
-										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-										stulpelis_apacia = false;
-										stulpelis = true;
-										cout << GREEN << "HIT shot! " << RESET << endl << endl;
-									}
-									else
-									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-										stulpelis_apacia = false;
-										A_Y_n = A_Y_n - 4;
-										cout << RED << "MISSED shot! " << RESET << endl << endl;
-									}
+										A_Y_n = A_Y_n + 1;
 
-									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-									Sleep(2000);
+										drawA_I_GameBoard();
+										A_I_shooting_stats();
+										A_I_steps++;
 
-									drawA_I_GameBoard();
+										A_number = A_Y_n;
+
+										if (A_X_l == 0) A_letter = 'A';
+										if (A_X_l == 1) A_letter = 'B';
+										if (A_X_l == 2) A_letter = 'C';
+										if (A_X_l == 3) A_letter = 'D';
+										if (A_X_l == 4) A_letter = 'E';
+										if (A_X_l == 5) A_letter = 'F';
+										if (A_X_l == 6) A_letter = 'G';
+										if (A_X_l == 7) A_letter = 'H';
+										if (A_X_l == 8) A_letter = 'I';
+										if (A_X_l == 9) A_letter = 'J';
+
+										if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+											A_I_ships_count--;
+											A_I_score = A_I_score + 100;
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+											stulpelis_apacia = false;
+											stulpelis = true;
+											cout << GREEN << "HIT shot! " << RESET << endl << endl;
+										}
+										else
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+											A_I_score = A_I_score - 100;
+											stulpelis_apacia = false;
+											A_Y_n = A_Y_n - 4;
+											cout << RED << "MISS shot! " << RESET << endl << endl;
+										}
+
+										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+										Sleep(2000);
+										if (A_I_ships_count == 0) A_I_Victory();
+										drawA_I_GameBoard();
+									}
 								}
 								else
 								{
@@ -3622,188 +3687,209 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			stulpelis = false;
 		}
 
-
-
-
-
 		if (A_Y_n - 1 >= 0) {
-			A_Y_n = A_Y_n - 1;
-
-			drawA_I_GameBoard();
-			A_I_shooting_stats();
-			A_I_steps++;
-
-			A_number = A_Y_n;
-
-			if (A_X_l == 0) A_letter = 'A';
-			if (A_X_l == 1) A_letter = 'B';
-			if (A_X_l == 2) A_letter = 'C';
-			if (A_X_l == 3) A_letter = 'D';
-			if (A_X_l == 4) A_letter = 'E';
-			if (A_X_l == 5) A_letter = 'F';
-			if (A_X_l == 6) A_letter = 'G';
-			if (A_X_l == 7) A_letter = 'H';
-			if (A_X_l == 8) A_letter = 'I';
-			if (A_X_l == 9) A_letter = 'J';
-
-			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			if (AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'X')
 			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-				A_I_ships_count--;
-				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-				stulpelis_virsus = true;
-				stulpelis = true;
-				stulpelis_is_virsaus = true;
-				cout << GREEN << "HIT shot! " << RESET << endl << endl;
-			}
-			else
-			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-				stulpelis_virsus = false;
-				stulpelis = false;
-				A_Y_n = A_Y_n + 1;
-				cout << RED << "MISSED shot! " << RESET << endl << endl;
-			}
+				A_Y_n = A_Y_n - 1;
 
-			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-			Sleep(2000);
+				drawA_I_GameBoard();
+				A_I_shooting_stats();
+				A_I_steps++;
 
-			drawA_I_GameBoard();
+				A_number = A_Y_n;
+
+				if (A_X_l == 0) A_letter = 'A';
+				if (A_X_l == 1) A_letter = 'B';
+				if (A_X_l == 2) A_letter = 'C';
+				if (A_X_l == 3) A_letter = 'D';
+				if (A_X_l == 4) A_letter = 'E';
+				if (A_X_l == 5) A_letter = 'F';
+				if (A_X_l == 6) A_letter = 'G';
+				if (A_X_l == 7) A_letter = 'H';
+				if (A_X_l == 8) A_letter = 'I';
+				if (A_X_l == 9) A_letter = 'J';
+
+				if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+					A_I_ships_count--;
+					A_I_score = A_I_score + 100;
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+					stulpelis_virsus = true;
+					stulpelis = true;
+					stulpelis_is_virsaus = true;
+					cout << GREEN << "HIT shot! " << RESET << endl << endl;
+				}
+				else
+				{
+					AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+					N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+					A_I_score = A_I_score - 100;
+					stulpelis_virsus = false;
+					stulpelis = false;
+					A_Y_n = A_Y_n + 1;
+					cout << RED << "MISS shot! " << RESET << endl << endl;
+				}
+
+				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+				Sleep(2000);
+				if (A_I_ships_count == 0) A_I_Victory();
+				drawA_I_GameBoard();
+			}
 
 			if (stulpelis_virsus == true)
 			{
 				if (A_Y_n - 1 >= 0)
 				{
-					A_Y_n = A_Y_n - 1;
-
-					drawA_I_GameBoard();
-					A_I_shooting_stats();
-					A_I_steps++;
-
-					A_number = A_Y_n;
-
-					if (A_X_l == 0) A_letter = 'A';
-					if (A_X_l == 1) A_letter = 'B';
-					if (A_X_l == 2) A_letter = 'C';
-					if (A_X_l == 3) A_letter = 'D';
-					if (A_X_l == 4) A_letter = 'E';
-					if (A_X_l == 5) A_letter = 'F';
-					if (A_X_l == 6) A_letter = 'G';
-					if (A_X_l == 7) A_letter = 'H';
-					if (A_X_l == 8) A_letter = 'I';
-					if (A_X_l == 9) A_letter = 'J';
-
-					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					if (AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'X')
 					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-						A_I_ships_count--;
-						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-						stulpelis_virsus = true;
-						stulpelis = true;
-						cout << GREEN << "HIT shot! " << RESET << endl << endl;
-					}
-					else
-					{
-						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-						stulpelis_virsus = false;
-						A_Y_n = A_Y_n + 2;
-						cout << RED << "MISSED shot! " << RESET << endl << endl;
-					}
+						A_Y_n = A_Y_n - 1;
 
-					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-					Sleep(2000);
+						drawA_I_GameBoard();
+						A_I_shooting_stats();
+						A_I_steps++;
 
-					drawA_I_GameBoard();
+						A_number = A_Y_n;
+
+						if (A_X_l == 0) A_letter = 'A';
+						if (A_X_l == 1) A_letter = 'B';
+						if (A_X_l == 2) A_letter = 'C';
+						if (A_X_l == 3) A_letter = 'D';
+						if (A_X_l == 4) A_letter = 'E';
+						if (A_X_l == 5) A_letter = 'F';
+						if (A_X_l == 6) A_letter = 'G';
+						if (A_X_l == 7) A_letter = 'H';
+						if (A_X_l == 8) A_letter = 'I';
+						if (A_X_l == 9) A_letter = 'J';
+
+						if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+							A_I_ships_count--;
+							A_I_score = A_I_score + 100;
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+							stulpelis_virsus = true;
+							stulpelis = true;
+							cout << GREEN << "HIT shot! " << RESET << endl << endl;
+						}
+						else
+						{
+							AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+							N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+							A_I_score = A_I_score - 100;
+							stulpelis_virsus = false;
+							A_Y_n = A_Y_n + 2;
+							cout << RED << "MISS shot! " << RESET << endl << endl;
+						}
+
+						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+						Sleep(2000);
+						if (A_I_ships_count == 0) A_I_Victory();
+						drawA_I_GameBoard();
+					}
 
 					if (stulpelis_virsus == true)
 					{
 						if (A_Y_n - 1 >= 0)
 						{
-							A_Y_n = A_Y_n - 1;
-
-							drawA_I_GameBoard();
-							A_I_shooting_stats();
-							A_I_steps++;
-
-							A_number = A_Y_n;
-
-							if (A_X_l == 0) A_letter = 'A';
-							if (A_X_l == 1) A_letter = 'B';
-							if (A_X_l == 2) A_letter = 'C';
-							if (A_X_l == 3) A_letter = 'D';
-							if (A_X_l == 4) A_letter = 'E';
-							if (A_X_l == 5) A_letter = 'F';
-							if (A_X_l == 6) A_letter = 'G';
-							if (A_X_l == 7) A_letter = 'H';
-							if (A_X_l == 8) A_letter = 'I';
-							if (A_X_l == 9) A_letter = 'J';
-
-							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							if (AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'X')
 							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-								A_I_ships_count--;
-								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-								stulpelis_virsus = true;
-								stulpelis = true;
-								cout << GREEN << "HIT shot! " << RESET << endl << endl;
-							}
-							else
-							{
-								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-								stulpelis_virsus = false;
-								A_Y_n = A_Y_n + 3;
-								cout << RED << "MISSED shot! " << RESET << endl << endl;
-							}
+								A_Y_n = A_Y_n - 1;
 
-							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-							Sleep(2000);
+								drawA_I_GameBoard();
+								A_I_shooting_stats();
+								A_I_steps++;
 
-							drawA_I_GameBoard();
+								A_number = A_Y_n;
+
+								if (A_X_l == 0) A_letter = 'A';
+								if (A_X_l == 1) A_letter = 'B';
+								if (A_X_l == 2) A_letter = 'C';
+								if (A_X_l == 3) A_letter = 'D';
+								if (A_X_l == 4) A_letter = 'E';
+								if (A_X_l == 5) A_letter = 'F';
+								if (A_X_l == 6) A_letter = 'G';
+								if (A_X_l == 7) A_letter = 'H';
+								if (A_X_l == 8) A_letter = 'I';
+								if (A_X_l == 9) A_letter = 'J';
+
+								if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+									A_I_ships_count--;
+									A_I_score = A_I_score + 100;
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+									stulpelis_virsus = true;
+									stulpelis = true;
+									cout << GREEN << "HIT shot! " << RESET << endl << endl;
+								}
+								else
+								{
+									AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+									N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+									A_I_score = A_I_score - 100;
+									stulpelis_virsus = false;
+									A_Y_n = A_Y_n + 3;
+									cout << RED << "MISS shot! " << RESET << endl << endl;
+								}
+
+								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+								Sleep(2000);
+								if (A_I_ships_count == 0) A_I_Victory();
+								drawA_I_GameBoard();
+							}
 
 							if (stulpelis_virsus == true)
 							{
 								if (A_Y_n - 1 >= 0)
 								{
-									A_Y_n = A_Y_n - 1;
-
-									drawA_I_GameBoard();
-									A_I_shooting_stats();
-									A_I_steps++;
-
-									A_number = A_Y_n;
-
-									if (A_X_l == 0) A_letter = 'A';
-									if (A_X_l == 1) A_letter = 'B';
-									if (A_X_l == 2) A_letter = 'C';
-									if (A_X_l == 3) A_letter = 'D';
-									if (A_X_l == 4) A_letter = 'E';
-									if (A_X_l == 5) A_letter = 'F';
-									if (A_X_l == 6) A_letter = 'G';
-									if (A_X_l == 7) A_letter = 'H';
-									if (A_X_l == 8) A_letter = 'I';
-									if (A_X_l == 9) A_letter = 'J';
-
-									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									if (AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n - 1][A_X_l] != 'X')
 									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-										A_I_ships_count--;
-										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
-										stulpelis_virsus = false;
-										stulpelis = true;
-										cout << GREEN << "HIT shot! " << RESET << endl << endl;
-									}
-									else
-									{
-										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-										stulpelis_virsus = false;
-										A_Y_n = A_Y_n + 4;
-										cout << RED << "MISSED shot! " << RESET << endl << endl;
+										A_Y_n = A_Y_n - 1;
+
+										drawA_I_GameBoard();
+										A_I_shooting_stats();
+										A_I_steps++;
+
+										A_number = A_Y_n;
+
+										if (A_X_l == 0) A_letter = 'A';
+										if (A_X_l == 1) A_letter = 'B';
+										if (A_X_l == 2) A_letter = 'C';
+										if (A_X_l == 3) A_letter = 'D';
+										if (A_X_l == 4) A_letter = 'E';
+										if (A_X_l == 5) A_letter = 'F';
+										if (A_X_l == 6) A_letter = 'G';
+										if (A_X_l == 7) A_letter = 'H';
+										if (A_X_l == 8) A_letter = 'I';
+										if (A_X_l == 9) A_letter = 'J';
+
+										if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+											A_I_ships_count--;
+											A_I_score = A_I_score + 100;
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+											stulpelis_virsus = false;
+											stulpelis = true;
+											cout << GREEN << "HIT shot! " << RESET << endl << endl;
+										}
+										else
+										{
+											AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+											N_PlayerBoard_second[A_Y_n][A_X_l] = 'N';
+											A_I_score = A_I_score - 100;
+											stulpelis_virsus = false;
+											A_Y_n = A_Y_n + 4;
+											cout << RED << "MISS shot! " << RESET << endl << endl;
+										}
+
+										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+										Sleep(2000);
+										if (A_I_ships_count == 0) A_I_Victory();
+										drawA_I_GameBoard();
 									}
 
-									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-									Sleep(2000);
-
-									drawA_I_GameBoard();
 								}
 								else
 								{
@@ -3844,6 +3930,8 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 	const void A_I_Victory()
 	{
 		system("cls");
+		//ClearScreen();
+
 		drawA_I_title();
 		cout << YELLOW << " *****************************************************************" << RESET << endl;
 		cout << YELLOW << "** " << RESET << CYAN << "##   ##  ##  #######  ########  #######  #######  ##    ##  ##" << YELLOW << " **" << RESET << endl;
@@ -3857,6 +3945,8 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 		cout << BLUE << "Shooting steps: " << A_I_steps << RESET << endl;
 		cout << BLUE << "Score: " << A_I_score << RESET << endl;
 		cout << BLUE << "SUNKED ship's parts: 20" << RESET << endl;
+
+		exit(0);
 	}
 
 };
