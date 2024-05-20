@@ -1369,9 +1369,17 @@ private:
 	string P_letter_to_str, P_number_to_str, P_letter_number_str;
 	bool P_klaida_cant;
 	string P_ltr_str, P_nmb_ltr_str;
+
+	int A_I_score, A_I_ships_count, A_I_steps;
+	char A_letter;
+	int A_number;
+	int A_X_l, A_Y_n;
+	int A_GameBoardSize;
+	bool TEST_0, TEST_1, TEST_2, TEST_3, available_test;
+	int AI_selectedTest, AI_test_count;
 public:
-MultiPlayer_A() : P_name(" "), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" ") {}
-MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" ") {}
+MultiPlayer_A() : P_name(" "), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), TEST_0(0), TEST_1(0), TEST_2(0), TEST_3(0), AI_selectedTest(0), AI_test_count(0), available_test(0) {}
+MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), TEST_0(0), TEST_1(0), TEST_2(0), TEST_3(0), AI_selectedTest(0), AI_test_count(0), available_test(0) {}
 ~MultiPlayer_A() {}
 
 	void enterYourName()
@@ -2851,23 +2859,13 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 		}
 		left_ships--;
 	}
-};
-
-class MultiPlayer_B : public MultiPlayerC_BASE
-{
-private:
-	int A_I_score, A_I_ships_count, A_I_steps;
-	char A_letter;
-	int A_number;
-	int A_X_l, A_Y_n;
-	int A_GameBoardSize;
-	bool TEST_0, TEST_1, TEST_2, TEST_3, available_test;
-	int AI_selectedTest, AI_test_count;
-public:
-MultiPlayer_B() : A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), TEST_0(0), TEST_1(0), TEST_2(0), TEST_3(0), AI_selectedTest(0), AI_test_count(0), available_test(0) {}
-MultiPlayer_B(int x, int y, int z) : A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), TEST_0(0), TEST_1(0), TEST_2(0), TEST_3(0), AI_selectedTest(0), AI_test_count(0), available_test(0) {}
-~MultiPlayer_B() {}
-
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	void drawA_I_GameBoard()
 	{
 		system("cls");
@@ -3108,6 +3106,24 @@ MultiPlayer_B(int x, int y, int z) : A_I_score(0), A_I_ships_count(20), A_I_step
 		}
 	}
 
+	const void A_I_Victory()
+	{
+		system("cls");
+		drawA_I_title();
+		cout << YELLOW << " *****************************************************************" << RESET << endl;
+		cout << YELLOW << "** " << RESET << CYAN << "##   ##  ##  #######  ########  #######  #######  ##    ##  ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "** " << RESET << GREEN << "##   ##  ##  ##          ##     ##   ##  ##   ##   ##  ##   ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "** " << RESET << RED << "##   ##  ##  ##          ##     ##   ##  #####       ##     ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "** " << RESET << GREEN << " ## ##   ##  ##          ##     ##   ##  ##  ##      ##       " << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << "** " << RESET << CYAN << "   #     ##  #######     ##     #######  ##   ##     ##     ##" << YELLOW << " **" << RESET << endl;
+		cout << YELLOW << " ******************************************************************" << RESET << endl << endl;
+
+		cout << GREY << "|" << RED << "AI's" GREY << "|" << ORANGE << " GAME RESULTS: " << endl << endl;
+		cout << BLUE << "Shooting steps: " << A_I_steps << RESET << endl;
+		cout << BLUE << "Score: " << A_I_score << RESET << endl;
+		cout << BLUE << "SUNKED ship's parts: 20" << RESET << endl;
+	}
+
 };
 
 void DrawTitle();
@@ -3311,15 +3327,14 @@ void directionsMultiPlayerGameMenu()
 	mbazinis.drawLoading_A_I_GameBoard();
 	mbazinis.drawA_I_title();
 	
-	MultiPlayer_B AI_player;
-	MultiPlayer_A Normal_player;
+	MultiPlayer_A AI;
 
-	Normal_player.enterYourName();
-	Normal_player.drawN_P_GameBoard();
-	Normal_player.generate_N_P_SHIPS();
+	AI.enterYourName();
+	AI.drawN_P_GameBoard();
+	AI.generate_N_P_SHIPS();
 
-	AI_player.A_I_shooting();
-
+	AI.A_I_shooting();
+	AI.A_I_Victory();
 }
 
 void ClearScreen()
