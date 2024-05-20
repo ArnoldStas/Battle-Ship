@@ -2893,28 +2893,10 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 	void A_I_shooting()
 	{
-		ofstream ds;
-		ds.open("N_player_test.txt");
-		for (int i = 0; i < 10; i++)
-		{
-			for (int j = 0; j < 10; j++)
-			{
-				if (j == 9) ds << N_PlayerBoard_second[i][j];
-				else ds << N_PlayerBoard_second[i][j] << endl;
-			}
-		}
-
-
-		ds.close();
 
 		while (A_I_ships_count != 0)
 		{
 			drawA_I_GameBoard();
-
-			/*cout << BLUE << "SHOOTING STEP: - - " << RESET << endl;
-			cout << BLUE << "Score: - - " << RESET << endl;
-			cout << BLUE << "Last taken shot: - - " << RESET << endl;
-			cout << BLUE << "Remaining ship's parts: " << A_I_ships_count << RESET << endl << endl;*/
 
 			A_I_shooting_stats();
 
@@ -2928,88 +2910,10 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 			{
-				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
-				A_I_score = A_I_score + 100;
-				A_I_ships_count--;
-
-				if (A_X_l + 1 < 10) if (AI_PlayerBoard[A_Y_n][A_X_l + 1] == '#') {
-					TEST_0 = true; AI_test_count++;
-				}
-				if (A_Y_n + 1 < 10) if (AI_PlayerBoard[A_Y_n + 1][A_X_l] == '#') {
-					TEST_1 = true; AI_test_count++;
-				}
-				if (A_X_l - 1 >= 0) if (AI_PlayerBoard[A_Y_n][A_X_l - 1] == '#') {
-					TEST_2 = true; AI_test_count++;
-				}
-				if (A_Y_n - 1 >= 0) if (AI_PlayerBoard[A_Y_n - 1][A_X_l] == '#') {
-					TEST_3 = true; AI_test_count++;
-				}
-
-				if (AI_test_count > 0) {
-					test_cases();
-
-					if (AI_selectedTest == 0) {
-						if (N_PlayerBoard_second[A_Y_n][A_X_l + 1] == 'S') {
-							AI_PlayerBoard[A_Y_n][A_X_l + 1] = 'X';
-							A_X_l = A_X_l + 1;
-							available_test = true;
-							A_I_ships_count--;
-							A_I_score = A_I_score + 100;
-						}
-						else {
-							AI_PlayerBoard[A_Y_n][A_X_l + 1] = 'O';
-							A_I_score = A_I_score - 100;
-							available_test = false;
-						}
-					}
-					if (AI_selectedTest == 1) {
-						if (N_PlayerBoard_second[A_Y_n + 1][A_X_l] == 'S') {
-							AI_PlayerBoard[A_Y_n + 1][A_X_l] = 'X';
-							A_Y_n = A_Y_n + 1;
-							available_test = true;
-							A_I_ships_count--;
-							A_I_score = A_I_score + 100;
-						}
-						else {
-							AI_PlayerBoard[A_Y_n + 1][A_X_l] = 'O';
-							A_I_score = A_I_score - 100;
-							available_test = false;
-						}
-					}
-					if (AI_selectedTest == 2) {
-						if (N_PlayerBoard_second[A_Y_n][A_X_l - 1] == 'S') {
-							AI_PlayerBoard[A_Y_n][A_X_l - 1] = 'X';
-							A_X_l = A_X_l - 1;
-							available_test = true;
-							A_I_ships_count--;
-							A_I_score = A_I_score + 100;
-						}
-						else {
-							AI_PlayerBoard[A_Y_n][A_X_l - 1] = 'O';
-							A_I_score = A_I_score - 100;
-							available_test = false;
-						}
-					}
-					if (AI_selectedTest == 3) {
-						if (N_PlayerBoard_second[A_Y_n - 1][A_X_l] == 'S') {
-							AI_PlayerBoard[A_Y_n - 1][A_X_l] = 'X';
-							A_Y_n = A_Y_n - 1;
-							available_test = true;
-							A_I_ships_count--;
-							A_I_score = A_I_score + 100;
-						}
-						else {
-							AI_PlayerBoard[A_Y_n - 1][A_X_l] = 'O';
-							A_I_score = A_I_score - 100;
-							available_test = false;
-						}
-					}
-				}
-
+				A_I_pataike();
 			}
 			else {
 				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
-				A_I_score = A_I_score - 100;
 			}
 
 			A_number = A_Y_n;
@@ -3028,15 +2932,809 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
 			Sleep(2000);
 
-			TEST_0 = false;
-			TEST_1 = false;
-			TEST_2 = false;
-			TEST_3 = false;
 			AI_test_count = 0;
 			A_I_steps++;
 
 			drawA_I_GameBoard();
 		}
+
+	}
+
+	void A_I_pataike()
+	{
+
+		AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+		N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+
+		bool eile = false;
+		bool stulpelis = false;
+
+		bool eile_desine = false;
+		bool stulpelis_apacia = false;
+		bool eile_kaire = false;
+		bool stulpelis_virsus = false;
+
+		bool eile_desine_zero = false;
+		bool eile_kaire_zero = false;
+
+		bool eile_is_desines = false;
+		bool eile_is_kaires = false;
+
+		bool stulpelis_is_apacios = false;
+		bool stulpelis_is_virsaus = false;
+
+		if (A_X_l + 1 < 10) {
+			A_X_l = A_X_l + 1;
+
+			drawA_I_GameBoard();
+			A_I_shooting_stats();
+
+			A_number = A_Y_n;
+
+			if (A_X_l == 0) A_letter = 'A';
+			if (A_X_l == 1) A_letter = 'B';
+			if (A_X_l == 2) A_letter = 'C';
+			if (A_X_l == 3) A_letter = 'D';
+			if (A_X_l == 4) A_letter = 'E';
+			if (A_X_l == 5) A_letter = 'F';
+			if (A_X_l == 6) A_letter = 'G';
+			if (A_X_l == 7) A_letter = 'H';
+			if (A_X_l == 8) A_letter = 'I';
+			if (A_X_l == 9) A_letter = 'J';
+
+			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+				eile_desine = true;
+				eile = true;
+				eile_is_desines = true;
+			}
+			else
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+				eile_desine = false;
+				eile = false;
+				A_X_l = A_X_l - 1;
+			}
+
+			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+			Sleep(2000);
+
+			drawA_I_GameBoard();
+
+			if (eile_desine == true)
+			{
+				if (A_X_l + 1 < 10)
+				{
+					A_X_l = A_X_l + 1;
+
+					drawA_I_GameBoard();
+					A_I_shooting_stats();
+
+					A_number = A_Y_n;
+
+					if (A_X_l == 0) A_letter = 'A';
+					if (A_X_l == 1) A_letter = 'B';
+					if (A_X_l == 2) A_letter = 'C';
+					if (A_X_l == 3) A_letter = 'D';
+					if (A_X_l == 4) A_letter = 'E';
+					if (A_X_l == 5) A_letter = 'F';
+					if (A_X_l == 6) A_letter = 'G';
+					if (A_X_l == 7) A_letter = 'H';
+					if (A_X_l == 8) A_letter = 'I';
+					if (A_X_l == 9) A_letter = 'J';
+
+					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+						eile_desine = true;
+						eile = true;
+					}
+					else
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+						eile_desine = false;
+						A_X_l = A_X_l - 2;
+					}
+
+					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+					Sleep(2000);
+
+					drawA_I_GameBoard();
+
+					if (eile_desine == true)
+					{
+						if (A_X_l + 1 < 10)
+						{
+							A_X_l = A_X_l + 1;
+
+							drawA_I_GameBoard();
+							A_I_shooting_stats();
+
+							A_number = A_Y_n;
+
+							if (A_X_l == 0) A_letter = 'A';
+							if (A_X_l == 1) A_letter = 'B';
+							if (A_X_l == 2) A_letter = 'C';
+							if (A_X_l == 3) A_letter = 'D';
+							if (A_X_l == 4) A_letter = 'E';
+							if (A_X_l == 5) A_letter = 'F';
+							if (A_X_l == 6) A_letter = 'G';
+							if (A_X_l == 7) A_letter = 'H';
+							if (A_X_l == 8) A_letter = 'I';
+							if (A_X_l == 9) A_letter = 'J';
+
+							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+								eile_desine = true;
+								eile = true;
+							}
+							else
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+								eile_desine = false;
+								A_X_l = A_X_l - 3;
+							}
+
+							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+							Sleep(2000);
+
+							drawA_I_GameBoard();
+
+							if (eile_desine == true)
+							{
+								if (A_X_l + 1 < 10)
+								{
+									A_X_l = A_X_l + 1;
+
+									drawA_I_GameBoard();
+									A_I_shooting_stats();
+
+									A_number = A_Y_n;
+
+									if (A_X_l == 0) A_letter = 'A';
+									if (A_X_l == 1) A_letter = 'B';
+									if (A_X_l == 2) A_letter = 'C';
+									if (A_X_l == 3) A_letter = 'D';
+									if (A_X_l == 4) A_letter = 'E';
+									if (A_X_l == 5) A_letter = 'F';
+									if (A_X_l == 6) A_letter = 'G';
+									if (A_X_l == 7) A_letter = 'H';
+									if (A_X_l == 8) A_letter = 'I';
+									if (A_X_l == 9) A_letter = 'J';
+
+									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+										eile_desine = false;
+										eile = true;
+									}
+									else
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+										eile_desine = false;
+										A_X_l = A_X_l - 4;
+									}
+
+									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+									Sleep(2000);
+
+									drawA_I_GameBoard();
+								}
+								else
+								{
+									eile_desine = false;
+								}
+							}
+						}
+						else
+						{
+							eile_desine = false;
+						}
+					}
+				}
+				else
+				{
+					eile_desine = false;
+				}
+			}
+		}
+		else
+		{
+			eile_desine = false;
+			eile = false;
+		}
+
+
+
+
+
+		if (A_X_l - 1 >= 0) {
+			A_X_l = A_X_l - 1;
+
+			drawA_I_GameBoard();
+			A_I_shooting_stats();
+
+			A_number = A_Y_n;
+
+			if (A_X_l == 0) A_letter = 'A';
+			if (A_X_l == 1) A_letter = 'B';
+			if (A_X_l == 2) A_letter = 'C';
+			if (A_X_l == 3) A_letter = 'D';
+			if (A_X_l == 4) A_letter = 'E';
+			if (A_X_l == 5) A_letter = 'F';
+			if (A_X_l == 6) A_letter = 'G';
+			if (A_X_l == 7) A_letter = 'H';
+			if (A_X_l == 8) A_letter = 'I';
+			if (A_X_l == 9) A_letter = 'J';
+
+			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+				eile_kaire = true;
+				eile = true;
+				eile_is_kaires = true;
+			}
+			else
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+				eile_kaire = false;
+				eile = false;
+				A_X_l = A_X_l + 1;
+			}
+
+			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+			Sleep(2000);
+
+			drawA_I_GameBoard();
+
+			if (eile_kaire == true)
+			{
+				if (A_X_l - 1 >= 0)
+				{
+					A_X_l = A_X_l - 1;
+
+					drawA_I_GameBoard();
+					A_I_shooting_stats();
+
+					A_number = A_Y_n;
+
+					if (A_X_l == 0) A_letter = 'A';
+					if (A_X_l == 1) A_letter = 'B';
+					if (A_X_l == 2) A_letter = 'C';
+					if (A_X_l == 3) A_letter = 'D';
+					if (A_X_l == 4) A_letter = 'E';
+					if (A_X_l == 5) A_letter = 'F';
+					if (A_X_l == 6) A_letter = 'G';
+					if (A_X_l == 7) A_letter = 'H';
+					if (A_X_l == 8) A_letter = 'I';
+					if (A_X_l == 9) A_letter = 'J';
+
+					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+						eile_kaire = true;
+						eile = true;
+					}
+					else
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+						eile_kaire = false;
+						A_X_l = A_X_l + 2;
+					}
+
+					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+					Sleep(2000);
+
+					drawA_I_GameBoard();
+
+					if (eile_kaire == true)
+					{
+						if (A_X_l - 1 >= 0)
+						{
+							A_X_l = A_X_l - 1;
+
+							drawA_I_GameBoard();
+							A_I_shooting_stats();
+
+							A_number = A_Y_n;
+
+							if (A_X_l == 0) A_letter = 'A';
+							if (A_X_l == 1) A_letter = 'B';
+							if (A_X_l == 2) A_letter = 'C';
+							if (A_X_l == 3) A_letter = 'D';
+							if (A_X_l == 4) A_letter = 'E';
+							if (A_X_l == 5) A_letter = 'F';
+							if (A_X_l == 6) A_letter = 'G';
+							if (A_X_l == 7) A_letter = 'H';
+							if (A_X_l == 8) A_letter = 'I';
+							if (A_X_l == 9) A_letter = 'J';
+
+							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+								eile_kaire = true;
+								eile = true;
+							}
+							else
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+								eile_kaire = false;
+								A_X_l = A_X_l + 3;
+							}
+
+							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+							Sleep(2000);
+
+							drawA_I_GameBoard();
+
+							if (eile_kaire == true)
+							{
+								if (A_X_l - 1 >= 0)
+								{
+									A_X_l = A_X_l - 1;
+
+									drawA_I_GameBoard();
+									A_I_shooting_stats();
+
+									A_number = A_Y_n;
+
+									if (A_X_l == 0) A_letter = 'A';
+									if (A_X_l == 1) A_letter = 'B';
+									if (A_X_l == 2) A_letter = 'C';
+									if (A_X_l == 3) A_letter = 'D';
+									if (A_X_l == 4) A_letter = 'E';
+									if (A_X_l == 5) A_letter = 'F';
+									if (A_X_l == 6) A_letter = 'G';
+									if (A_X_l == 7) A_letter = 'H';
+									if (A_X_l == 8) A_letter = 'I';
+									if (A_X_l == 9) A_letter = 'J';
+
+									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+										eile_kaire = false;
+										eile = true;
+									}
+									else
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+										eile_kaire = false;
+										A_X_l = A_X_l + 4;
+									}
+
+									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+									Sleep(2000);
+
+									drawA_I_GameBoard();
+								}
+								else
+								{
+									eile_kaire = false;
+								}
+							}
+						}
+						else
+						{
+							eile_kaire = false;
+						}
+					}
+				}
+				else
+				{
+					eile_kaire = false;
+				}
+			}
+		}
+		else
+		{
+			eile_kaire = false;
+			eile = false;
+		}
+		
+
+
+
+
+
+
+		if (eile_is_desines == true || eile_is_kaires == true) A_I_shooting();
+
+
+
+
+
+
+
+
+		if (A_Y_n + 1 < 10) {
+			A_Y_n = A_Y_n + 1;
+
+			drawA_I_GameBoard();
+			A_I_shooting_stats();
+
+			A_number = A_Y_n;
+
+			if (A_X_l == 0) A_letter = 'A';
+			if (A_X_l == 1) A_letter = 'B';
+			if (A_X_l == 2) A_letter = 'C';
+			if (A_X_l == 3) A_letter = 'D';
+			if (A_X_l == 4) A_letter = 'E';
+			if (A_X_l == 5) A_letter = 'F';
+			if (A_X_l == 6) A_letter = 'G';
+			if (A_X_l == 7) A_letter = 'H';
+			if (A_X_l == 8) A_letter = 'I';
+			if (A_X_l == 9) A_letter = 'J';
+
+			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+				stulpelis_apacia = true;
+				stulpelis = true;
+				stulpelis_is_apacios = true;
+			}
+			else
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+				stulpelis_apacia = false;
+				stulpelis = false;
+				A_Y_n = A_Y_n - 1;
+			}
+
+			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+			Sleep(2000);
+
+			drawA_I_GameBoard();
+
+			if (stulpelis_apacia == true)
+			{
+				if (A_Y_n + 1 < 10)
+				{
+					A_Y_n = A_Y_n + 1;
+
+					drawA_I_GameBoard();
+					A_I_shooting_stats();
+
+					A_number = A_Y_n;
+
+					if (A_X_l == 0) A_letter = 'A';
+					if (A_X_l == 1) A_letter = 'B';
+					if (A_X_l == 2) A_letter = 'C';
+					if (A_X_l == 3) A_letter = 'D';
+					if (A_X_l == 4) A_letter = 'E';
+					if (A_X_l == 5) A_letter = 'F';
+					if (A_X_l == 6) A_letter = 'G';
+					if (A_X_l == 7) A_letter = 'H';
+					if (A_X_l == 8) A_letter = 'I';
+					if (A_X_l == 9) A_letter = 'J';
+
+					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+						stulpelis_apacia = true;
+						stulpelis = true;
+					}
+					else
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+						stulpelis_apacia = false;
+						A_Y_n = A_Y_n - 2;
+					}
+
+					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+					Sleep(2000);
+
+					drawA_I_GameBoard();
+
+					if (stulpelis_apacia == true)
+					{
+						if (A_Y_n + 1 < 10)
+						{
+							A_Y_n = A_Y_n + 1;
+
+							drawA_I_GameBoard();
+							A_I_shooting_stats();
+
+							A_number = A_Y_n;
+
+							if (A_X_l == 0) A_letter = 'A';
+							if (A_X_l == 1) A_letter = 'B';
+							if (A_X_l == 2) A_letter = 'C';
+							if (A_X_l == 3) A_letter = 'D';
+							if (A_X_l == 4) A_letter = 'E';
+							if (A_X_l == 5) A_letter = 'F';
+							if (A_X_l == 6) A_letter = 'G';
+							if (A_X_l == 7) A_letter = 'H';
+							if (A_X_l == 8) A_letter = 'I';
+							if (A_X_l == 9) A_letter = 'J';
+
+							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+								stulpelis_apacia = true;
+								stulpelis = true;
+							}
+							else
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+								stulpelis_apacia = false;
+								A_Y_n = A_Y_n - 3;
+							}
+
+							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+							Sleep(2000);
+
+							drawA_I_GameBoard();
+
+							if (stulpelis_apacia == true)
+							{
+								if (A_Y_n + 1 < 10)
+								{
+									A_Y_n = A_Y_n + 1;
+
+									drawA_I_GameBoard();
+									A_I_shooting_stats();
+
+									A_number = A_Y_n;
+
+									if (A_X_l == 0) A_letter = 'A';
+									if (A_X_l == 1) A_letter = 'B';
+									if (A_X_l == 2) A_letter = 'C';
+									if (A_X_l == 3) A_letter = 'D';
+									if (A_X_l == 4) A_letter = 'E';
+									if (A_X_l == 5) A_letter = 'F';
+									if (A_X_l == 6) A_letter = 'G';
+									if (A_X_l == 7) A_letter = 'H';
+									if (A_X_l == 8) A_letter = 'I';
+									if (A_X_l == 9) A_letter = 'J';
+
+									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+										stulpelis_apacia = false;
+										stulpelis = true;
+									}
+									else
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+										stulpelis_apacia = false;
+										A_Y_n = A_Y_n - 4;
+									}
+
+									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+									Sleep(2000);
+
+									drawA_I_GameBoard();
+								}
+								else
+								{
+									stulpelis_apacia = false;
+								}
+							}
+						}
+						else
+						{
+							stulpelis_apacia = false;
+						}
+					}
+				}
+				else
+				{
+					stulpelis_apacia = false;
+				}
+			}
+		}
+		else
+		{
+			stulpelis_apacia = false;
+			stulpelis = false;
+		}
+
+
+
+
+
+		if (A_Y_n - 1 >= 0) {
+			A_Y_n = A_Y_n - 1;
+
+			drawA_I_GameBoard();
+			A_I_shooting_stats();
+
+			A_number = A_Y_n;
+
+			if (A_X_l == 0) A_letter = 'A';
+			if (A_X_l == 1) A_letter = 'B';
+			if (A_X_l == 2) A_letter = 'C';
+			if (A_X_l == 3) A_letter = 'D';
+			if (A_X_l == 4) A_letter = 'E';
+			if (A_X_l == 5) A_letter = 'F';
+			if (A_X_l == 6) A_letter = 'G';
+			if (A_X_l == 7) A_letter = 'H';
+			if (A_X_l == 8) A_letter = 'I';
+			if (A_X_l == 9) A_letter = 'J';
+
+			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+				stulpelis_virsus = true;
+				stulpelis = true;
+				stulpelis_is_virsaus = true;
+			}
+			else
+			{
+				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+				stulpelis_virsus = false;
+				stulpelis = false;
+				A_Y_n = A_Y_n + 1;
+			}
+
+			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+			Sleep(2000);
+
+			drawA_I_GameBoard();
+
+			if (stulpelis_virsus == true)
+			{
+				if (A_Y_n - 1 >= 0)
+				{
+					A_Y_n = A_Y_n - 1;
+
+					drawA_I_GameBoard();
+					A_I_shooting_stats();
+
+					A_number = A_Y_n;
+
+					if (A_X_l == 0) A_letter = 'A';
+					if (A_X_l == 1) A_letter = 'B';
+					if (A_X_l == 2) A_letter = 'C';
+					if (A_X_l == 3) A_letter = 'D';
+					if (A_X_l == 4) A_letter = 'E';
+					if (A_X_l == 5) A_letter = 'F';
+					if (A_X_l == 6) A_letter = 'G';
+					if (A_X_l == 7) A_letter = 'H';
+					if (A_X_l == 8) A_letter = 'I';
+					if (A_X_l == 9) A_letter = 'J';
+
+					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+						stulpelis_virsus = true;
+						stulpelis = true;
+					}
+					else
+					{
+						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+						stulpelis_virsus = false;
+						A_Y_n = A_Y_n + 2;
+					}
+
+					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+					Sleep(2000);
+
+					drawA_I_GameBoard();
+
+					if (stulpelis_virsus == true)
+					{
+						if (A_Y_n - 1 >= 0)
+						{
+							A_Y_n = A_Y_n - 1;
+
+							drawA_I_GameBoard();
+							A_I_shooting_stats();
+
+							A_number = A_Y_n;
+
+							if (A_X_l == 0) A_letter = 'A';
+							if (A_X_l == 1) A_letter = 'B';
+							if (A_X_l == 2) A_letter = 'C';
+							if (A_X_l == 3) A_letter = 'D';
+							if (A_X_l == 4) A_letter = 'E';
+							if (A_X_l == 5) A_letter = 'F';
+							if (A_X_l == 6) A_letter = 'G';
+							if (A_X_l == 7) A_letter = 'H';
+							if (A_X_l == 8) A_letter = 'I';
+							if (A_X_l == 9) A_letter = 'J';
+
+							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+								stulpelis_virsus = true;
+								stulpelis = true;
+							}
+							else
+							{
+								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+								stulpelis_virsus = false;
+								A_Y_n = A_Y_n + 3;
+							}
+
+							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+							Sleep(2000);
+
+							drawA_I_GameBoard();
+
+							if (stulpelis_virsus == true)
+							{
+								if (A_Y_n - 1 >= 0)
+								{
+									A_Y_n = A_Y_n - 1;
+
+									drawA_I_GameBoard();
+									A_I_shooting_stats();
+
+									A_number = A_Y_n;
+
+									if (A_X_l == 0) A_letter = 'A';
+									if (A_X_l == 1) A_letter = 'B';
+									if (A_X_l == 2) A_letter = 'C';
+									if (A_X_l == 3) A_letter = 'D';
+									if (A_X_l == 4) A_letter = 'E';
+									if (A_X_l == 5) A_letter = 'F';
+									if (A_X_l == 6) A_letter = 'G';
+									if (A_X_l == 7) A_letter = 'H';
+									if (A_X_l == 8) A_letter = 'I';
+									if (A_X_l == 9) A_letter = 'J';
+
+									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
+										stulpelis_virsus = false;
+										stulpelis = true;
+									}
+									else
+									{
+										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+										stulpelis_virsus = false;
+										A_Y_n = A_Y_n + 4;
+									}
+
+									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+									Sleep(2000);
+
+									drawA_I_GameBoard();
+								}
+								else
+								{
+									stulpelis_virsus = false;
+								}
+							}
+						}
+						else
+						{
+							stulpelis_virsus = false;
+						}
+					}
+				}
+				else
+				{
+					stulpelis_virsus = false;
+				}
+			}
+		}
+		else
+		{
+			stulpelis_virsus = false;
+			stulpelis = false;
+		}
+
+		A_I_shooting();
 
 	}
 
