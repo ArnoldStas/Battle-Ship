@@ -1375,11 +1375,16 @@ private:
 	int A_number;
 	int A_X_l, A_Y_n;
 	int A_GameBoardSize;
-	bool TEST_0, TEST_1, TEST_2, TEST_3, available_test;
-	int AI_selectedTest, AI_test_count;
+
+	bool eile, stulpelis;
+	bool eile_desine, stulpelis_apacia;
+	bool eile_kaire, stulpelis_virsus;
+	bool eile_is_desines, eile_is_kaires;
+	bool stulpelis_is_apacios, stulpelis_is_virsaus;
+	
 public:
-MultiPlayer_A() : P_name(" "), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), TEST_0(0), TEST_1(0), TEST_2(0), TEST_3(0), AI_selectedTest(0), AI_test_count(0), available_test(0) {}
-MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), TEST_0(0), TEST_1(0), TEST_2(0), TEST_3(0), AI_selectedTest(0), AI_test_count(0), available_test(0) {}
+MultiPlayer_A() : P_name(" "), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), eile(0), stulpelis(0), eile_desine(0), stulpelis_apacia(0), eile_kaire(0), stulpelis_virsus(0), eile_is_desines(0), eile_is_kaires(0), stulpelis_is_apacios(0), stulpelis_is_virsaus(0) {}
+MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), eile(0), stulpelis(0), eile_desine(0), stulpelis_apacia(0), eile_kaire(0), stulpelis_virsus(0), eile_is_desines(0), eile_is_kaires(0), stulpelis_is_apacios(0), stulpelis_is_virsaus(0) {}
 ~MultiPlayer_A() {}
 
 	void enterYourName()
@@ -2902,7 +2907,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 			srand(static_cast<unsigned int>(time(0)));
 
-			if (available_test == false) do
+			do
 			{
 				A_X_l = rand() % A_GameBoardSize;
 				A_Y_n = rand() % A_GameBoardSize;
@@ -2910,10 +2915,12 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 			{
+				A_I_ships_count--;
 				A_I_pataike();
 			}
 			else {
 				AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
+				cout << RED << "MISSED shot! " << RESET << endl << endl;
 			}
 
 			A_number = A_Y_n;
@@ -2932,7 +2939,6 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
 			Sleep(2000);
 
-			AI_test_count = 0;
 			A_I_steps++;
 
 			drawA_I_GameBoard();
@@ -2943,31 +2949,57 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 	void A_I_pataike()
 	{
 
+		drawA_I_GameBoard();
+		A_I_shooting_stats();
+		A_I_steps++;
+
+		A_number = A_Y_n;
+
+		if (A_X_l == 0) A_letter = 'A';
+		if (A_X_l == 1) A_letter = 'B';
+		if (A_X_l == 2) A_letter = 'C';
+		if (A_X_l == 3) A_letter = 'D';
+		if (A_X_l == 4) A_letter = 'E';
+		if (A_X_l == 5) A_letter = 'F';
+		if (A_X_l == 6) A_letter = 'G';
+		if (A_X_l == 7) A_letter = 'H';
+		if (A_X_l == 8) A_letter = 'I';
+		if (A_X_l == 9) A_letter = 'J';
+
+
 		AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
 		N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 
-		bool eile = false;
-		bool stulpelis = false;
+		cout << GREEN << "HIT shot! " << RESET << endl << endl;
 
-		bool eile_desine = false;
-		bool stulpelis_apacia = false;
-		bool eile_kaire = false;
-		bool stulpelis_virsus = false;
+		cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+		Sleep(2000);
 
-		bool eile_desine_zero = false;
-		bool eile_kaire_zero = false;
+		drawA_I_GameBoard();
 
-		bool eile_is_desines = false;
-		bool eile_is_kaires = false;
 
-		bool stulpelis_is_apacios = false;
-		bool stulpelis_is_virsaus = false;
+		eile = false;
+		stulpelis = false;
+
+		eile_desine = false;
+		stulpelis_apacia = false;
+
+		eile_kaire = false;
+		stulpelis_virsus = false;
+
+		eile_is_desines = false;
+		eile_is_kaires = false;
+
+		stulpelis_is_apacios = false;
+		stulpelis_is_virsaus = false;
+
 
 		if (A_X_l + 1 < 10) {
 			A_X_l = A_X_l + 1;
 
 			drawA_I_GameBoard();
 			A_I_shooting_stats();
+			A_I_steps++;
 
 			A_number = A_Y_n;
 
@@ -2985,10 +3017,12 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 			{
 				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				A_I_ships_count--;
 				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 				eile_desine = true;
 				eile = true;
 				eile_is_desines = true;
+				cout << GREEN << "HIT shot! " << RESET << endl << endl;
 			}
 			else
 			{
@@ -2996,6 +3030,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				eile_desine = false;
 				eile = false;
 				A_X_l = A_X_l - 1;
+				cout << RED << "MISSED shot! " << RESET << endl << endl;
 			}
 
 			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3011,6 +3046,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 					drawA_I_GameBoard();
 					A_I_shooting_stats();
+					A_I_steps++;
 
 					A_number = A_Y_n;
 
@@ -3028,15 +3064,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						A_I_ships_count--;
 						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 						eile_desine = true;
 						eile = true;
+						cout << GREEN << "HIT shot! " << RESET << endl << endl;
 					}
 					else
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 						eile_desine = false;
 						A_X_l = A_X_l - 2;
+						cout << RED << "MISSED shot! " << RESET << endl << endl;
 					}
 
 					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3052,6 +3091,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 							drawA_I_GameBoard();
 							A_I_shooting_stats();
+							A_I_steps++;
 
 							A_number = A_Y_n;
 
@@ -3069,15 +3109,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								A_I_ships_count--;
 								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 								eile_desine = true;
 								eile = true;
+								cout << GREEN << "HIT shot! " << RESET << endl << endl;
 							}
 							else
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 								eile_desine = false;
 								A_X_l = A_X_l - 3;
+								cout << RED << "MISSED shot! " << RESET << endl << endl;
 							}
 
 							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3093,6 +3136,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 									drawA_I_GameBoard();
 									A_I_shooting_stats();
+									A_I_steps++;
 
 									A_number = A_Y_n;
 
@@ -3110,15 +3154,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										A_I_ships_count--;
 										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 										eile_desine = false;
 										eile = true;
+										cout << GREEN << "HIT shot! " << RESET << endl << endl;
 									}
 									else
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 										eile_desine = false;
 										A_X_l = A_X_l - 4;
+										cout << RED << "MISSED shot! " << RESET << endl << endl;
 									}
 
 									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3159,6 +3206,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 			drawA_I_GameBoard();
 			A_I_shooting_stats();
+			A_I_steps++;
 
 			A_number = A_Y_n;
 
@@ -3176,10 +3224,12 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 			{
 				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				A_I_ships_count--;
 				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 				eile_kaire = true;
 				eile = true;
 				eile_is_kaires = true;
+				cout << GREEN << "HIT shot! " << RESET << endl << endl;
 			}
 			else
 			{
@@ -3187,6 +3237,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				eile_kaire = false;
 				eile = false;
 				A_X_l = A_X_l + 1;
+				cout << RED << "MISSED shot! " << RESET << endl << endl;
 			}
 
 			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3202,6 +3253,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 					drawA_I_GameBoard();
 					A_I_shooting_stats();
+					A_I_steps++;
 
 					A_number = A_Y_n;
 
@@ -3219,15 +3271,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						A_I_ships_count--;
 						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 						eile_kaire = true;
 						eile = true;
+						cout << GREEN << "HIT shot! " << RESET << endl << endl;
 					}
 					else
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 						eile_kaire = false;
 						A_X_l = A_X_l + 2;
+						cout << RED << "MISSED shot! " << RESET << endl << endl;
 					}
 
 					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3243,6 +3298,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 							drawA_I_GameBoard();
 							A_I_shooting_stats();
+							A_I_steps++;
 
 							A_number = A_Y_n;
 
@@ -3260,15 +3316,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								A_I_ships_count--;
 								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 								eile_kaire = true;
 								eile = true;
+								cout << GREEN << "HIT shot! " << RESET << endl << endl;
 							}
 							else
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 								eile_kaire = false;
 								A_X_l = A_X_l + 3;
+								cout << RED << "MISSED shot! " << RESET << endl << endl;
 							}
 
 							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3284,6 +3343,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 									drawA_I_GameBoard();
 									A_I_shooting_stats();
+									A_I_steps++;
 
 									A_number = A_Y_n;
 
@@ -3301,15 +3361,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										A_I_ships_count--;
 										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 										eile_kaire = false;
 										eile = true;
+										cout << GREEN << "HIT shot! " << RESET << endl << endl;
 									}
 									else
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 										eile_kaire = false;
 										A_X_l = A_X_l + 4;
+										cout << RED << "MISSED shot! " << RESET << endl << endl;
 									}
 
 									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3361,6 +3424,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 			drawA_I_GameBoard();
 			A_I_shooting_stats();
+			A_I_steps++;
 
 			A_number = A_Y_n;
 
@@ -3378,10 +3442,12 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 			{
 				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				A_I_ships_count--;
 				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 				stulpelis_apacia = true;
 				stulpelis = true;
 				stulpelis_is_apacios = true;
+				cout << GREEN << "HIT shot! " << RESET << endl << endl;
 			}
 			else
 			{
@@ -3389,6 +3455,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				stulpelis_apacia = false;
 				stulpelis = false;
 				A_Y_n = A_Y_n - 1;
+				cout << RED << "MISSED shot! " << RESET << endl << endl;
 			}
 
 			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3404,6 +3471,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 					drawA_I_GameBoard();
 					A_I_shooting_stats();
+					A_I_steps++;
 
 					A_number = A_Y_n;
 
@@ -3421,15 +3489,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						A_I_ships_count--;
 						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 						stulpelis_apacia = true;
 						stulpelis = true;
+						cout << GREEN << "HIT shot! " << RESET << endl << endl;
 					}
 					else
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 						stulpelis_apacia = false;
 						A_Y_n = A_Y_n - 2;
+						cout << RED << "MISSED shot! " << RESET << endl << endl;
 					}
 
 					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3445,6 +3516,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 							drawA_I_GameBoard();
 							A_I_shooting_stats();
+							A_I_steps++;
 
 							A_number = A_Y_n;
 
@@ -3462,15 +3534,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								A_I_ships_count--;
 								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 								stulpelis_apacia = true;
 								stulpelis = true;
+								cout << GREEN << "HIT shot! " << RESET << endl << endl;
 							}
 							else
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 								stulpelis_apacia = false;
 								A_Y_n = A_Y_n - 3;
+								cout << RED << "MISSED shot! " << RESET << endl << endl;
 							}
 
 							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3486,6 +3561,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 									drawA_I_GameBoard();
 									A_I_shooting_stats();
+									A_I_steps++;
 
 									A_number = A_Y_n;
 
@@ -3503,15 +3579,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										A_I_ships_count--;
 										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 										stulpelis_apacia = false;
 										stulpelis = true;
+										cout << GREEN << "HIT shot! " << RESET << endl << endl;
 									}
 									else
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 										stulpelis_apacia = false;
 										A_Y_n = A_Y_n - 4;
+										cout << RED << "MISSED shot! " << RESET << endl << endl;
 									}
 
 									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3552,6 +3631,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 			drawA_I_GameBoard();
 			A_I_shooting_stats();
+			A_I_steps++;
 
 			A_number = A_Y_n;
 
@@ -3569,10 +3649,12 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 			if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 			{
 				AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+				A_I_ships_count--;
 				N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 				stulpelis_virsus = true;
 				stulpelis = true;
 				stulpelis_is_virsaus = true;
+				cout << GREEN << "HIT shot! " << RESET << endl << endl;
 			}
 			else
 			{
@@ -3580,6 +3662,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				stulpelis_virsus = false;
 				stulpelis = false;
 				A_Y_n = A_Y_n + 1;
+				cout << RED << "MISSED shot! " << RESET << endl << endl;
 			}
 
 			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3595,6 +3678,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 					drawA_I_GameBoard();
 					A_I_shooting_stats();
+					A_I_steps++;
 
 					A_number = A_Y_n;
 
@@ -3612,15 +3696,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 					if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+						A_I_ships_count--;
 						N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 						stulpelis_virsus = true;
 						stulpelis = true;
+						cout << GREEN << "HIT shot! " << RESET << endl << endl;
 					}
 					else
 					{
 						AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 						stulpelis_virsus = false;
 						A_Y_n = A_Y_n + 2;
+						cout << RED << "MISSED shot! " << RESET << endl << endl;
 					}
 
 					cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3636,6 +3723,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 							drawA_I_GameBoard();
 							A_I_shooting_stats();
+							A_I_steps++;
 
 							A_number = A_Y_n;
 
@@ -3653,15 +3741,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 							if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+								A_I_ships_count--;
 								N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 								stulpelis_virsus = true;
 								stulpelis = true;
+								cout << GREEN << "HIT shot! " << RESET << endl << endl;
 							}
 							else
 							{
 								AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 								stulpelis_virsus = false;
 								A_Y_n = A_Y_n + 3;
+								cout << RED << "MISSED shot! " << RESET << endl << endl;
 							}
 
 							cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3677,6 +3768,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 									drawA_I_GameBoard();
 									A_I_shooting_stats();
+									A_I_steps++;
 
 									A_number = A_Y_n;
 
@@ -3694,15 +3786,18 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 									if (N_PlayerBoard_second[A_Y_n][A_X_l] == 'S')
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'X';
+										A_I_ships_count--;
 										N_PlayerBoard_second[A_Y_n][A_X_l] = 'U';
 										stulpelis_virsus = false;
 										stulpelis = true;
+										cout << GREEN << "HIT shot! " << RESET << endl << endl;
 									}
 									else
 									{
 										AI_PlayerBoard[A_Y_n][A_X_l] = 'O';
 										stulpelis_virsus = false;
 										A_Y_n = A_Y_n + 4;
+										cout << RED << "MISSED shot! " << RESET << endl << endl;
 									}
 
 									cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
@@ -3744,64 +3839,6 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 		cout << BLUE << "Score: " << A_I_score << RESET << endl;
 		cout << BLUE << "Last taken shot: " << A_letter << " " << A_number << RESET << endl;
 		cout << BLUE << "Remaining ship's parts: " << A_I_ships_count << RESET << endl << endl;
-	}
-
-	void test_cases()
-	{
-		if (TEST_0 == true && TEST_1 == false && TEST_2 == false && TEST_3 == false) AI_selectedTest = 0; //0 1 2 3 (0)
-		if (TEST_0 == false && TEST_1 == true && TEST_2 == false && TEST_3 == false) AI_selectedTest = 1; //0 1 2 3 (1)
-		if (TEST_0 == false && TEST_1 == false && TEST_2 == true && TEST_3 == false) AI_selectedTest = 2; //0 1 2 3 (2)
-		if (TEST_0 == false && TEST_1 == false && TEST_2 == false && TEST_3 == true) AI_selectedTest = 0; //0 1 2 3 (3)
-		if (TEST_0 == true && TEST_1 == true && TEST_2 == false && TEST_3 == false) AI_selectedTest = rand() % AI_test_count; //0 1 2 3 (01)
-		if (TEST_0 == true && TEST_1 == false && TEST_2 == true && TEST_3 == false)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 1); //0 1 2 3 (02)
-			} while (AI_selectedTest == 1);
-		}
-		if (TEST_0 == true && TEST_1 == false && TEST_2 == false && TEST_3 == true)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 2); //0 1 2 3 (03)
-			} while (AI_selectedTest == 1 || AI_selectedTest == 2);
-		}
-		if (TEST_0 == true && TEST_1 == true && TEST_2 == true && TEST_3 == false) AI_selectedTest = rand() % AI_test_count; //0 1 2 3 (012)
-		if (TEST_0 == true && TEST_1 == true && TEST_2 == false && TEST_3 == true)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 1); //0 1 2 3 (013)
-			} while (AI_selectedTest == 2);
-		}
-		if (TEST_0 == true && TEST_1 == false && TEST_2 == true && TEST_3 == true)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 1); //0 1 2 3 (023)
-			} while (AI_selectedTest == 1);
-		}
-		if (TEST_0 == false && TEST_1 == true && TEST_2 == true && TEST_3 == false)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 1); //0 1 2 3 (12)
-			} while (AI_selectedTest == 0);
-		}
-		if (TEST_0 == false && TEST_1 == true && TEST_2 == false && TEST_3 == true)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 2); //0 1 2 3 (13)
-			} while (AI_selectedTest == 0 || AI_selectedTest == 2);
-		}
-		if (TEST_0 == false && TEST_1 == true && TEST_2 == true && TEST_3 == true)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 1); //0 1 2 3 (123)
-			} while (AI_selectedTest == 0);
-		}
-		if (TEST_0 == false && TEST_1 == false && TEST_2 == true && TEST_3 == true)
-		{
-			do {
-				AI_selectedTest = rand() % (AI_test_count + 2); //0 1 2 3 (23)
-			} while (AI_selectedTest == 0 || AI_selectedTest == 1);
-		}
 	}
 
 	const void A_I_Victory()
