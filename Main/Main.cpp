@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <Windows.h>
 #include <conio.h>
@@ -1376,6 +1376,7 @@ private:
 	int A_X_l, A_Y_n;
 	int A_GameBoardSize;
 
+	bool shootingas;
 	bool eile, stulpelis;
 	bool eile_desine, stulpelis_apacia;
 	bool eile_kaire, stulpelis_virsus;
@@ -1383,8 +1384,8 @@ private:
 	bool stulpelis_is_apacios, stulpelis_is_virsaus;
 	
 public:
-MultiPlayer_A() : P_name(" "), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), eile(0), stulpelis(0), eile_desine(0), stulpelis_apacia(0), eile_kaire(0), stulpelis_virsus(0), eile_is_desines(0), eile_is_kaires(0), stulpelis_is_apacios(0), stulpelis_is_virsaus(0) {}
-MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), eile(0), stulpelis(0), eile_desine(0), stulpelis_apacia(0), eile_kaire(0), stulpelis_virsus(0), eile_is_desines(0), eile_is_kaires(0), stulpelis_is_apacios(0), stulpelis_is_virsaus(0) {}
+MultiPlayer_A() : P_name(" "), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), eile(0), stulpelis(0), eile_desine(0), stulpelis_apacia(0), eile_kaire(0), stulpelis_virsus(0), eile_is_desines(0), eile_is_kaires(0), stulpelis_is_apacios(0), stulpelis_is_virsaus(0), shootingas(0) {}
+MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), eile(0), stulpelis(0), eile_desine(0), stulpelis_apacia(0), eile_kaire(0), stulpelis_virsus(0), eile_is_desines(0), eile_is_kaires(0), stulpelis_is_apacios(0), stulpelis_is_virsaus(0), shootingas(0) {}
 ~MultiPlayer_A() {}
 
 	void enterYourName()
@@ -2679,7 +2680,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 					cout << endl;
 					cout << BROWN << "{1} SS" << GREY << " - COORDINATES" << RESET << endl << endl;
 					cout << GREEN << "LETTER & NUMBER (Exp. A 2) " << RESET << endl;
-					cout << GREY << "(2) ENTER coordinate of" << BROWN << "|SS| " << GREY << "ship: ";
+					cout << GREY << "(2) ENTER coordinate of " << BROWN << "|SS| " << GREY << "ship: ";
 
 					cout << RED;
 					cin >> P_letter >> P_number;
@@ -2899,6 +2900,17 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 
 	void A_I_shooting()
 	{
+		if (shootingas == false)
+		{
+			system("cls");
+			drawA_I_GameBoard();
+			cout << BLUE << "SHOOTING STEP: - - " << RESET << endl;
+			cout << BLUE << "Score: - - " << RESET << endl;
+			cout << BLUE << "Last taken shot: - - " << RESET << endl;
+			cout << BLUE << "Remaining ship's parts: " << A_I_ships_count << RESET << endl << endl;
+			Sleep(2000);
+			shootingas = true;
+		}
 
 		while (A_I_ships_count != 0)
 		{
@@ -2928,28 +2940,26 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				cout << RED << "MISS shot! " << RESET << endl << endl;
 			}
 
-			if (AI_PlayerBoard[A_Y_n][A_X_l] != 'O' || AI_PlayerBoard[A_Y_n][A_X_l] != 'X')
-			{
-				A_number = A_Y_n;
+			A_number = A_Y_n;
 
-				if (A_X_l == 0) A_letter = 'A';
-				if (A_X_l == 1) A_letter = 'B';
-				if (A_X_l == 2) A_letter = 'C';
-				if (A_X_l == 3) A_letter = 'D';
-				if (A_X_l == 4) A_letter = 'E';
-				if (A_X_l == 5) A_letter = 'F';
-				if (A_X_l == 6) A_letter = 'G';
-				if (A_X_l == 7) A_letter = 'H';
-				if (A_X_l == 8) A_letter = 'I';
-				if (A_X_l == 9) A_letter = 'J';
+			if (A_X_l == 0) A_letter = 'A';
+			if (A_X_l == 1) A_letter = 'B';
+			if (A_X_l == 2) A_letter = 'C';
+			if (A_X_l == 3) A_letter = 'D';
+			if (A_X_l == 4) A_letter = 'E';
+			if (A_X_l == 5) A_letter = 'F';
+			if (A_X_l == 6) A_letter = 'G';
+			if (A_X_l == 7) A_letter = 'H';
+			if (A_X_l == 8) A_letter = 'I';
+			if (A_X_l == 9) A_letter = 'J';
 
-				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-				Sleep(2000);
+			cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
+			Sleep(1000);
 
-				A_I_steps++;
+			A_I_steps++;
 
-				drawA_I_GameBoard();
-			}
+			drawA_I_GameBoard();
+
 		}
 
 	}
@@ -2981,7 +2991,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 		cout << GREEN << "HIT shot! " << RESET << endl << endl;
 
 		cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-		Sleep(2000);
+		Sleep(1000);
 
 		drawA_I_GameBoard();
 
@@ -3047,7 +3057,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				}
 
 				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-				Sleep(2000);
+				Sleep(1000);
 				if (A_I_ships_count == 0) A_I_Victory();
 				drawA_I_GameBoard();
 			}
@@ -3098,7 +3108,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 						}
 
 						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-						Sleep(2000);
+						Sleep(1000);
 						if (A_I_ships_count == 0) A_I_Victory();
 						drawA_I_GameBoard();
 					}
@@ -3149,7 +3159,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 								}
 
 								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-								Sleep(2000);
+								Sleep(1000);
 								if (A_I_ships_count == 0) A_I_Victory();
 								drawA_I_GameBoard();
 							}
@@ -3200,7 +3210,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 										}
 
 										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-										Sleep(2000);
+										Sleep(1000);
 										if (A_I_ships_count == 0) A_I_Victory();
 										drawA_I_GameBoard();
 									}
@@ -3275,7 +3285,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				}
 
 				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-				Sleep(2000);
+				Sleep(1000);
 				if (A_I_ships_count == 0) A_I_Victory();
 				drawA_I_GameBoard();
 			}
@@ -3326,7 +3336,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 						}
 
 						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-						Sleep(2000);
+						Sleep(1000);
 						if (A_I_ships_count == 0) A_I_Victory();
 						drawA_I_GameBoard();
 					}
@@ -3377,7 +3387,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 								}
 
 								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-								Sleep(2000);
+								Sleep(1000);
 								if (A_I_ships_count == 0) A_I_Victory();
 								drawA_I_GameBoard();
 							}
@@ -3428,7 +3438,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 										}
 
 										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-										Sleep(2000);
+										Sleep(1000);
 										if (A_I_ships_count == 0) A_I_Victory();
 										drawA_I_GameBoard();
 									}
@@ -3505,7 +3515,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				}
 
 				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-				Sleep(2000);
+				Sleep(1000);
 				if (A_I_ships_count == 0) A_I_Victory();
 				drawA_I_GameBoard();
 			}
@@ -3556,7 +3566,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 						}
 
 						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-						Sleep(2000);
+						Sleep(1000);
 						if (A_I_ships_count == 0) A_I_Victory();
 						drawA_I_GameBoard();
 					}
@@ -3607,7 +3617,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 								}
 
 								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-								Sleep(2000);
+								Sleep(1000);
 								if (A_I_ships_count == 0) A_I_Victory();
 								drawA_I_GameBoard();
 							}
@@ -3658,7 +3668,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 										}
 
 										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-										Sleep(2000);
+										Sleep(1000);
 										if (A_I_ships_count == 0) A_I_Victory();
 										drawA_I_GameBoard();
 									}
@@ -3732,7 +3742,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 				}
 
 				cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-				Sleep(2000);
+				Sleep(1000);
 				if (A_I_ships_count == 0) A_I_Victory();
 				drawA_I_GameBoard();
 			}
@@ -3783,7 +3793,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 						}
 
 						cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-						Sleep(2000);
+						Sleep(1000);
 						if (A_I_ships_count == 0) A_I_Victory();
 						drawA_I_GameBoard();
 					}
@@ -3834,7 +3844,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 								}
 
 								cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-								Sleep(2000);
+								Sleep(1000);
 								if (A_I_ships_count == 0) A_I_Victory();
 								drawA_I_GameBoard();
 							}
@@ -3885,7 +3895,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 										}
 
 										cout << GREY << "AI COORDINATE: " << RED << A_letter << " " << A_number << RESET << endl;
-										Sleep(2000);
+										Sleep(1000);
 										if (A_I_ships_count == 0) A_I_Victory();
 										drawA_I_GameBoard();
 									}
@@ -3944,7 +3954,7 @@ MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number
 		cout << GREY << "|" << RED << "AI's" GREY << "|" << ORANGE << " GAME RESULTS: " << endl << endl;
 		cout << BLUE << "Shooting steps: " << A_I_steps << RESET << endl;
 		cout << BLUE << "Score: " << A_I_score << RESET << endl;
-		cout << BLUE << "SUNKED ship's parts: 20" << RESET << endl;
+		cout << BLUE << "SUNKED ships: 10" << RESET << endl;
 
 		exit(0);
 	}
@@ -3958,6 +3968,10 @@ void ClearScreen(); // Istrinti ekrana kaskart
 void ShowConsoleCursor(bool showFlag); // Panaikinti cursor'iu
 
 void directionsGameMenu();
+void RulesDisplay();
+void directionsRules();
+void ABOUTDisplay();
+void directionsABOUT();
 
 void directionsSinglePlayerGameMenu();
 void directionsMultiPlayerGameMenu();
@@ -4081,12 +4095,50 @@ void Menu()
 				break;
 			}
 			case 1:
-				cout << "Displaying the rules..." << endl;
-				break;
-			case 2:
-				cout << "Showing about..." << endl;
+			{
+				time_t startTime = time(nullptr); // Gaunamas pradinis laikas
+
+				while (true)
+				{
+					system("cls");
+					ClearScreen();
+					cout << YELLOW << "LOADING THE RULES." << RESET << endl;
+					Sleep(500);
+					ClearScreen();
+					cout << YELLOW << "LOADING THE RULES.." << RESET << endl;
+					Sleep(500);
+					ClearScreen();
+					cout << YELLOW << "LOADING THE RULES..." << RESET << endl;
+					Sleep(500);
+
+					if (difftime(time(nullptr), startTime) >= 1) break; // Tikriname ar 5 sec jau praejo
+				}
+				directionsRules();
 				break;
 			}
+			case 2:
+			{
+				time_t startTime = time(nullptr); // Gaunamas pradinis laikas
+
+				while (true)
+				{
+					system("cls");
+					ClearScreen();
+					cout << YELLOW << "LOADING THE CREATOR OF THIS GAME." << RESET << endl;
+					Sleep(500);
+					ClearScreen();
+					cout << YELLOW << "LOADING THE CREATOR OF THIS GAME.." << RESET << endl;
+					Sleep(500);
+					ClearScreen();
+					cout << YELLOW << "LOADING THE CREATOR OF THIS GAME..." << RESET << endl;
+					Sleep(500);
+
+					if (difftime(time(nullptr), startTime) >= 1) break; // Tikriname ar 5 sec jau praejo
+				}
+				directionsABOUT();
+				break;
+			}
+		}
 			exitMenu = true;
 		}
 	}
@@ -4108,6 +4160,215 @@ void directionsGameMenu()
 
 	//cout << "S = " << S << endl;
 	//cout << "M = " << M;
+
+}
+
+void directionsRules()
+{
+	system("cls");
+	RulesDisplay();
+
+	bool exitRules = false;
+	int selectedOptionRules = 0;
+	char keyPressedRules = ' ';
+
+	while (!exitRules)
+	{
+		ShowConsoleCursor(false);
+		ClearScreen();
+		RulesDisplay();
+
+		cout << endl;
+
+		if (selectedOptionRules == 0)
+		{
+			cout << RED << "                                                BACK                              " << RESET << endl;
+			cout << "                                                EXIT                                 " << endl;
+		}
+		else if (selectedOptionRules == 1)
+		{
+			cout << "                                                BACK                              " << endl;
+			cout << RED << "                                                EXIT                                 " << RESET << endl;
+		}
+
+		if (selectedOptionRules == 0)
+		{
+			cout << endl;
+			cout << BLUE << "SELECTED OPTION (RULES): " << RESET << "BACK" << endl << endl;
+		}
+		else
+		{
+			cout << endl;
+			cout << BLUE << "SELECTED OPTION (RULES): " << RESET << "EXIT" << endl << endl;
+		}
+
+		while (true)
+		{
+			if (_kbhit())
+			{
+				keyPressedRules = _getch();
+				switch (keyPressedRules)
+				{
+				case 72: //Move up
+					if (selectedOptionRules == 0) {
+						selectedOptionRules = 1;
+					}
+					else if (selectedOptionRules == 1) {
+						selectedOptionRules = 0;
+					}
+					break;
+				case 80: //Move down
+					if (selectedOptionRules == 0) {
+						selectedOptionRules = 1;
+					}
+					else if (selectedOptionRules == 1) {
+						selectedOptionRules = 0;
+					}
+					break;
+				}
+				break;
+			}
+		}
+
+		if (GetAsyncKeyState(VK_RETURN))
+		{
+			switch (selectedOptionRules)
+			{
+			case 0:
+				system("cls");
+				Menu();
+				exitRules = true;
+				break;
+			
+			case 1:
+				exit(0);
+			}
+		}
+	}
+}
+
+void RulesDisplay()
+{
+
+	cout << GREY << "                                        SinglePlayer (A) MODE" << RESET << endl << endl;
+
+	cout << YELLOW << " ********************************************************************************************************" << RESET << endl;
+	cout << YELLOW << "**" << BROWN << " {" << RED << "G" << BROWN << "} The goal is to sink all the ships on the gameboard " << YELLOW << "                                              **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "1" << ORANGE << "} Enter your game nickname " << YELLOW << "                                                                        **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "2" << ORANGE << "} Wait for the AI (computer) generate your ships on the gameboard " << YELLOW << "                                 **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "3" << ORANGE << "} Enter coordinates LETTER & NUMBER " << "(Exp. A 2)" << YELLOW << "                                                     **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "4" << ORANGE << "} After the entire game, you will receive a table with your best score and the ships you have sunk" << YELLOW << " **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "5" << ORANGE << "} GOODLUCK! HAVE FUN :) " << YELLOW << "                                                                           **" << RESET << endl;
+	cout << YELLOW << " ********************************************************************************************************" << RESET << endl << endl;
+
+	cout << GREY << "                                 Artificial Intelligence (A & B) MODE" << RESET << endl << endl;
+
+	cout << YELLOW << " ****************************************************************************************************" << RESET << endl;
+	cout << YELLOW << "**" << BROWN << " {" << RED << "G" << BROWN << "} The goal is to put all the ships on the gameboard for AI shooting " << YELLOW << "                           **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "1" << ORANGE << "} Enter your game nickname " << YELLOW << "                                                                    **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "2" << ORANGE << "} Place the ships on the gameboard " << YELLOW << "                                                            **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "3" << ORANGE << "} Watch how the AI shoots using its own coordinates " << YELLOW << "                                           **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "4" << ORANGE << "} After the entire game, AI will receive a table with the best score and the ships it has sunk" << YELLOW << " **" << RESET << endl;
+	cout << YELLOW << "**" << ORANGE << " {" << GREEN << "5" << ORANGE << "} HAVE FUN! :) " << YELLOW << "                                                                                **" << RESET << endl;
+	cout << YELLOW << " ****************************************************************************************************" << RESET << endl << endl;
+
+}
+
+void directionsABOUT()
+{
+
+	system("cls");
+	ABOUTDisplay();
+
+	bool exitABOUT = false;
+	int selectedOptionABOUT = 0;
+	char keyPressedABOUT = ' ';
+
+	while (!exitABOUT)
+	{
+		ShowConsoleCursor(false);
+		ClearScreen();
+		ABOUTDisplay();
+
+		cout << endl;
+
+		if (selectedOptionABOUT == 0)
+		{
+			cout << RED << "                                              BACK                              " << RESET << endl;
+			cout << "                                              EXIT                                 " << endl;
+		}
+		else if (selectedOptionABOUT == 1)
+		{
+			cout << "                                              BACK                              " << endl;
+			cout << RED << "                                              EXIT                                 " << RESET << endl;
+		}
+
+		if (selectedOptionABOUT == 0)
+		{
+			cout << endl;
+			cout << BLUE << "SELECTED OPTION (ABOUT): " << RESET << "BACK" << endl << endl;
+		}
+		else
+		{
+			cout << endl;
+			cout << BLUE << "SELECTED OPTION (ABOUT): " << RESET << "EXIT" << endl << endl;
+		}
+
+		while (true)
+		{
+			if (_kbhit())
+			{
+				keyPressedABOUT = _getch();
+				switch (keyPressedABOUT)
+				{
+				case 72: //Move up
+					if (selectedOptionABOUT == 0) {
+						selectedOptionABOUT = 1;
+					}
+					else if (selectedOptionABOUT == 1) {
+						selectedOptionABOUT = 0;
+					}
+					break;
+				case 80: //Move down
+					if (selectedOptionABOUT == 0) {
+						selectedOptionABOUT = 1;
+					}
+					else if (selectedOptionABOUT == 1) {
+						selectedOptionABOUT = 0;
+					}
+					break;
+				}
+				break;
+			}
+		}
+
+		if (GetAsyncKeyState(VK_RETURN))
+		{
+			switch (selectedOptionABOUT)
+			{
+			case 0:
+				system("cls");
+				Menu();
+				exitABOUT = true;
+				break;
+
+			case 1:
+				exit(0);
+			}
+		}
+	}
+}
+
+void ABOUTDisplay()
+{
+
+	cout << YELLOW << " ************************************************************************************************" << RESET << endl;
+	cout << YELLOW << "** " << ORANGE << "|This game was created by Arnoldas ST, a freshman at Vilnius Gediminas Technical University|" << YELLOW << " **" << RESET << endl;
+	cout << YELLOW << " ************************************************************************************************" << RESET << endl;
+
+	cout << endl;
+	cout << GREY << "(C) Copyright." << endl;
+	cout << "All Rights Reserved." << RESET << endl;
 
 }
 
