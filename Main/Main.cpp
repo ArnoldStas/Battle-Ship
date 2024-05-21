@@ -1553,7 +1553,7 @@ public:
 		test.close();
 	}
 
-	void S_P_Shooting()
+	void operator --()
 	{
 		set <string> used_c;
 		map <char, int> koordinate = {
@@ -4915,7 +4915,7 @@ void directionsSinglePlayerGameMenu()
 		single.generate_1SHIP_zone();
 	}
 
-	single.S_P_Shooting();
+	--single; //S_P_Shooting MODE
 
 }
 
