@@ -432,11 +432,38 @@ private:
 	int test_count, selectedTest;
 	char letter;
 	int number, letter_number;
-	int S_P_score, ships_count;
+	int S_P_score, ships_count;  
 	string letter_to_str, number_to_str, letter_number_str, ltr_str, nmb_ltr_str;
+
+	string l_n, n_n, l_n_n;
+	set <string> SHIP4_coords;
+
+	set <string> SHIP3_one_coords;
+	bool SHIP_3_one_done = false;
+	set <string> SHIP3_two_coords;
+	int ship_3_step;
+
+	set <string> SHIP2_one_coords;
+	bool SHIP_2_one_done = false;
+	set <string> SHIP2_two_coords;
+	bool SHIP_2_two_done = false;
+	set <string> SHIP2_three_coords;
+	int ship_2_step;
+
+	set <string> SHIP1_one_coords;
+	bool SHIP_1_one_done = false;
+	set <string> SHIP1_two_coords;
+	bool SHIP_1_two_done = false;
+	set <string> SHIP1_three_coords;
+	bool SHIP_1_three_done = false;
+	set <string> SHIP1_four_coords;
+	int ship_1_step;
+
+	int SHIP4_count, SHIP3_count, SHIP2_count, SHIP1_count;
+
 public:
-	SinglePlayerC() : S_name(" "), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(20), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ltr_str(" "), nmb_ltr_str(" ") {}
-	SinglePlayerC(string x) : S_name(x), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(20), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ltr_str(" "), nmb_ltr_str(" ") {}
+	SinglePlayerC() : S_name(" "), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(20), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ltr_str(" "), nmb_ltr_str(" "), SHIP4_count(1), SHIP3_count(2), SHIP2_count(3), SHIP1_count(4), ship_3_step(0), ship_2_step(0), ship_1_step(0) {}
+	SinglePlayerC(string x) : S_name(x), test_1(false), test_2(false), test_3(false), test_4(false), test_count(0), selectedTest(0), letter(' '), number(0), validInput(false), letter_number(0), validas(false), S_P_score(0), ships_count(20), letter_to_str(" "), number_to_str(" "), letter_number_str(" "), klaida_used(0), ltr_str(" "), nmb_ltr_str(" "), SHIP4_count(1), SHIP3_count(2), SHIP2_count(3), SHIP1_count(4), ship_3_step(0), ship_2_step(0), ship_1_step(0) {}
 	~SinglePlayerC() {}
 	void drawLoading_S_P_GameBoard()
 	{
@@ -471,7 +498,7 @@ public:
 		cout << endl;
 	}
 
-	void enterYourName()
+	void operator !()
 	{
 		system("cls");
 		drawS_P_title();
@@ -655,11 +682,32 @@ public:
 			} while (selectedTest == 0 || selectedTest == 1);
 		}
 
+		n_n = to_string(Y);
+		l_n = to_string(X);
+
+		l_n_n = n_n + l_n;
+
+		SHIP4_coords.insert(l_n_n);
+
 		if (selectedTest == 0) {
 
 			SPlayerBoard_second[Y][X + 1] = 'S';
 			SPlayerBoard_second[Y][X + 2] = 'S';
 			SPlayerBoard_second[Y][X + 3] = 'S';
+
+			n_n = to_string(Y);
+
+			l_n = to_string(X + 1);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			l_n = to_string(X + 2);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			l_n = to_string(X + 3);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
 
 		}
 		if (selectedTest == 1) {
@@ -668,6 +716,20 @@ public:
 			SPlayerBoard_second[Y + 2][X] = 'S';
 			SPlayerBoard_second[Y + 3][X] = 'S';
 
+			l_n = to_string(X);
+
+			n_n = to_string(Y + 1);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			n_n = to_string(Y + 2);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			n_n = to_string(Y + 3);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
 		}
 		if (selectedTest == 2) {
 
@@ -675,12 +737,40 @@ public:
 			SPlayerBoard_second[Y][X - 2] = 'S';
 			SPlayerBoard_second[Y][X - 3] = 'S';
 
+			n_n = to_string(Y);
+
+			l_n = to_string(X - 1);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			l_n = to_string(X - 2);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			l_n = to_string(X - 3);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
 		}
 		if (selectedTest == 3) {
 
 			SPlayerBoard_second[Y - 1][X] = 'S';
 			SPlayerBoard_second[Y - 2][X] = 'S';
 			SPlayerBoard_second[Y - 3][X] = 'S';
+
+			l_n = to_string(X);
+
+			n_n = to_string(Y - 1);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			n_n = to_string(Y - 2);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
+
+			n_n = to_string(Y - 3);
+			l_n_n = n_n + l_n;
+			SHIP4_coords.insert(l_n_n);
 
 		}
 	}
@@ -844,23 +934,156 @@ public:
 			} while (selectedTest == 0 || selectedTest == 1);
 		}
 
+		ship_3_step++;
 		//cout << selectedTest << endl;
+
+		if (SHIP_3_one_done == false && ship_3_step == 1)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP3_one_coords.insert(l_n_n);
+		}
+		if (SHIP_3_one_done == true && ship_3_step == 2)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP3_two_coords.insert(l_n_n);
+		}
+
 
 		if (selectedTest == 0) {
 			SPlayerBoard_second[Y][X + 1] = 'S';
 			SPlayerBoard_second[Y][X + 2] = 'S';
+
+			if (SHIP_3_one_done == false && ship_3_step == 1)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X + 1);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				l_n = to_string(X + 2);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				SHIP_3_one_done = true;
+			}
+
+			if (SHIP_3_one_done == true && ship_3_step == 2)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X + 1);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+
+				l_n = to_string(X + 2);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+			}
 		}
 		if (selectedTest == 1) {
 			SPlayerBoard_second[Y + 1][X] = 'S';
 			SPlayerBoard_second[Y + 2][X] = 'S';
+
+			if (SHIP_3_one_done == false && ship_3_step == 1)
+			{
+				l_n = to_string(X);
+
+				n_n = to_string(Y + 1);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				n_n = to_string(Y + 2);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				SHIP_3_one_done = true;
+			}
+
+			if (SHIP_3_one_done == true && ship_3_step == 2)
+			{
+				l_n = to_string(X);
+
+				n_n = to_string(Y + 1);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+
+				n_n = to_string(Y + 2);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+			}
 		}
 		if (selectedTest == 2) {
 			SPlayerBoard_second[Y][X - 1] = 'S';
 			SPlayerBoard_second[Y][X - 2] = 'S';
+
+			if (SHIP_3_one_done == false && ship_3_step == 1)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X - 1);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				l_n = to_string(X - 2);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				SHIP_3_one_done = true;
+			}
+
+			if (SHIP_3_one_done == true && ship_3_step == 2)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X - 1);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+
+				l_n = to_string(X - 2);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+			}
 		}
 		if (selectedTest == 3) {
 			SPlayerBoard_second[Y - 1][X] = 'S';
 			SPlayerBoard_second[Y - 2][X] = 'S';
+
+			if (SHIP_3_one_done == false && ship_3_step == 1)
+			{
+				l_n = to_string(X);
+
+				n_n = to_string(Y - 1);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				n_n = to_string(Y - 2);
+				l_n_n = n_n + l_n;
+				SHIP3_one_coords.insert(l_n_n);
+
+				SHIP_3_one_done = true;
+			}
+
+			if (SHIP_3_one_done == true && ship_3_step == 2)
+			{
+				l_n = to_string(X);
+
+				n_n = to_string(Y - 1);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+
+				n_n = to_string(Y - 2);
+				l_n_n = n_n + l_n;
+				SHIP3_two_coords.insert(l_n_n);
+			}
 		}
 	}
 
@@ -1008,17 +1231,180 @@ public:
 			} while (selectedTest == 0 || selectedTest == 1);
 		}
 
+		ship_2_step++;
+
+		if (SHIP_2_one_done == false && ship_2_step == 1)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP2_one_coords.insert(l_n_n);
+		}
+
+		if (SHIP_2_one_done == true && SHIP_2_two_done == false && ship_2_step == 2)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP2_two_coords.insert(l_n_n);
+		}
+
+		if (SHIP_2_one_done == true && SHIP_2_two_done == true && ship_2_step == 3)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP2_three_coords.insert(l_n_n);
+		}
+
 		if (selectedTest == 0) {
 			SPlayerBoard_second[Y][X + 1] = 'S';
+
+			if (SHIP_2_one_done == false && ship_2_step == 1)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X + 1);
+				l_n_n = n_n + l_n;
+				SHIP2_one_coords.insert(l_n_n);
+
+				SHIP_2_one_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == false && ship_2_step == 2)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X + 1);
+				l_n_n = n_n + l_n;
+				SHIP2_two_coords.insert(l_n_n);
+
+				SHIP_2_two_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == true && ship_2_step == 3)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X + 1);
+				l_n_n = n_n + l_n;
+				SHIP2_three_coords.insert(l_n_n);
+			}
+
 		}
 		if (selectedTest == 1) {
 			SPlayerBoard_second[Y + 1][X] = 'S';
+
+			if (SHIP_2_one_done == false && ship_2_step == 1)
+			{
+
+				l_n = to_string(X);
+
+				n_n = to_string(Y + 1);
+				l_n_n = n_n + l_n;
+				SHIP2_one_coords.insert(l_n_n);
+
+				SHIP_2_one_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == false && ship_2_step == 2)
+			{
+
+				l_n = to_string(X);
+
+				n_n = to_string(Y + 1);
+				l_n_n = n_n + l_n;
+				SHIP2_two_coords.insert(l_n_n);
+
+				SHIP_2_two_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == true && ship_2_step == 3)
+			{
+
+				l_n = to_string(X);
+
+				n_n = to_string(Y + 1);
+				l_n_n = n_n + l_n;
+				SHIP2_three_coords.insert(l_n_n);
+			}
 		}
 		if (selectedTest == 2) {
 			SPlayerBoard_second[Y][X - 1] = 'S';
+
+			if (SHIP_2_one_done == false && ship_2_step == 1)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X - 1);
+				l_n_n = n_n + l_n;
+				SHIP2_one_coords.insert(l_n_n);
+
+				SHIP_2_one_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == false && ship_2_step == 2)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X - 1);
+				l_n_n = n_n + l_n;
+				SHIP2_two_coords.insert(l_n_n);
+
+				SHIP_2_two_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == true && ship_2_step == 3)
+			{
+				n_n = to_string(Y);
+
+				l_n = to_string(X - 1);
+				l_n_n = n_n + l_n;
+				SHIP2_three_coords.insert(l_n_n);
+			}
 		}
 		if (selectedTest == 3) {
 			SPlayerBoard_second[Y - 1][X] = 'S';
+
+			if (SHIP_2_one_done == false && ship_2_step == 1)
+			{
+
+				l_n = to_string(X);
+
+				n_n = to_string(Y - 1);
+				l_n_n = n_n + l_n;
+				SHIP2_one_coords.insert(l_n_n);
+
+				SHIP_2_one_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == false && ship_2_step == 2)
+			{
+
+				l_n = to_string(X);
+
+				n_n = to_string(Y - 1);
+				l_n_n = n_n + l_n;
+				SHIP2_two_coords.insert(l_n_n);
+
+				SHIP_2_two_done = true;
+			}
+
+			if (SHIP_2_one_done == true && SHIP_2_two_done == true && ship_2_step == 3)
+			{
+
+				l_n = to_string(X);
+
+				n_n = to_string(Y - 1);
+				l_n_n = n_n + l_n;
+				SHIP2_three_coords.insert(l_n_n);
+			}
 		}
 	}
 
@@ -1079,6 +1465,54 @@ public:
 		//Y = 2;
 
 		SPlayerBoard_second[Y][X] = 'S';
+
+		ship_1_step++;
+
+		if (SHIP_1_one_done == false && ship_1_step == 1)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP1_one_coords.insert(l_n_n);
+
+			SHIP_1_one_done = true;
+		}
+
+		if (SHIP_1_one_done == true && SHIP_1_two_done == false && ship_1_step == 2)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP1_two_coords.insert(l_n_n);
+
+			SHIP_1_two_done = true;
+		}
+
+		if (SHIP_1_one_done == true && SHIP_1_two_done == true && SHIP_1_three_done == false && ship_1_step == 3)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP1_three_coords.insert(l_n_n);
+
+			SHIP_1_three_done = true;
+		}
+
+		if (SHIP_1_one_done == true && SHIP_1_two_done == true && SHIP_1_three_done == true && ship_1_step == 4)
+		{
+			n_n = to_string(Y);
+			l_n = to_string(X);
+
+			l_n_n = n_n + l_n;
+
+			SHIP1_four_coords.insert(l_n_n);
+		}
 	}
 
 	void generate_1SHIP_zone()
@@ -1139,6 +1573,8 @@ public:
 		cout << BLUE << "Last taken shot: - - " << RESET << endl;
 		cout << BLUE << "Remaining ship's parts: " << ships_count << RESET << endl;
 
+		ship_table();
+
 		while (!validInput)
 		{
 			cout << endl;
@@ -1190,7 +1626,7 @@ public:
 			if (letter == 'J') letter_number = 9;
 
 			ltr_str = to_string(letter_number);
-			nmb_ltr_str = ltr_str + number_to_str;
+			nmb_ltr_str = number_to_str + ltr_str;
 
 			if (SPlayerBoard_second[number][letter_number] == '#' || SPlayerBoard_second[number][letter_number] == '-') {
 				cout << endl;
@@ -1212,10 +1648,77 @@ public:
 				else cout << GREY << "INVALID COORDINATE" << RESET << endl << endl;
 				validInput = false;
 				score_table();
+				ship_table();
 			}
 			else {
 				cout << endl;
-				if (letter >= 'A' && letter <= 'J') SPlayerBoard[number][letter_number] = 'X';
+				if (letter >= 'A' && letter <= 'J')
+				{
+					SPlayerBoard[number][letter_number] = 'X';
+
+					//------------------------------------------------------------------------
+					if (SHIP4_coords.find(nmb_ltr_str) != SHIP4_coords.end())
+					{
+						SHIP4_coords.erase(nmb_ltr_str);
+						if (SHIP4_coords.empty()) SHIP4_count--;
+					}
+					//------------------------------------------------------------------------
+					if (SHIP3_one_coords.find(nmb_ltr_str) != SHIP3_one_coords.end())
+					{
+						SHIP3_one_coords.erase(nmb_ltr_str);
+						if (SHIP3_one_coords.empty()) SHIP3_count--;
+					}
+
+					if (SHIP3_two_coords.find(nmb_ltr_str) != SHIP3_two_coords.end())
+					{
+						SHIP3_two_coords.erase(nmb_ltr_str);
+						if (SHIP3_two_coords.empty()) SHIP3_count--;
+					}
+					//------------------------------------------------------------------------
+					if (SHIP2_one_coords.find(nmb_ltr_str) != SHIP2_one_coords.end())
+					{
+						SHIP2_one_coords.erase(nmb_ltr_str);
+						if (SHIP2_one_coords.empty()) SHIP2_count--;
+					}
+
+					if (SHIP2_two_coords.find(nmb_ltr_str) != SHIP2_two_coords.end())
+					{
+						SHIP2_two_coords.erase(nmb_ltr_str);
+						if (SHIP2_two_coords.empty()) SHIP2_count--;
+					}
+
+					if (SHIP2_three_coords.find(nmb_ltr_str) != SHIP2_three_coords.end())
+					{
+						SHIP2_three_coords.erase(nmb_ltr_str);
+						if (SHIP2_three_coords.empty()) SHIP2_count--;
+					}
+					//-------------------------------------------------------------------------
+					if (SHIP1_one_coords.find(nmb_ltr_str) != SHIP1_one_coords.end())
+					{
+						SHIP1_one_coords.erase(nmb_ltr_str);
+						if (SHIP1_one_coords.empty()) SHIP1_count--;
+					}
+
+					if (SHIP1_two_coords.find(nmb_ltr_str) != SHIP1_two_coords.end())
+					{
+						SHIP1_two_coords.erase(nmb_ltr_str);
+						if (SHIP1_two_coords.empty()) SHIP1_count--;
+					}
+
+					if (SHIP1_three_coords.find(nmb_ltr_str) != SHIP1_three_coords.end())
+					{
+						SHIP1_three_coords.erase(nmb_ltr_str);
+						if (SHIP1_three_coords.empty()) SHIP1_count--;
+					}
+
+					if (SHIP1_four_coords.find(nmb_ltr_str) != SHIP1_four_coords.end())
+					{
+						SHIP1_four_coords.erase(nmb_ltr_str);
+						if (SHIP1_four_coords.empty()) SHIP1_count--;
+					}
+					//-------------------------------------------------------------------------
+
+				}
 				ShowConsoleCursor(false);
 				ClearScreen();
 				drawS_P_title();
@@ -1237,6 +1740,7 @@ public:
 				}
 				validInput = false;
 				score_table();
+				ship_table();
 			}
 		}
 	}
@@ -1246,6 +1750,15 @@ public:
 		cout << BLUE << "Score: " << S_P_score << RESET << endl;
 		cout << BLUE << "Last taken shot: " << letter << " " << number << RESET << endl;
 		cout << BLUE << "Remaining ship's parts: " << ships_count << RESET << endl;
+	}
+
+	void ship_table()
+	{
+		cout << endl;
+		cout << BROWN << "{SSSS}" << BLUE << " - SHIPS LEFT: " << SHIP4_count << RESET << endl;
+		cout << BROWN << "{SSS}" << BLUE << "  - SHIPS LEFT: " << SHIP3_count << RESET << endl;
+		cout << BROWN << "{SS}" << BLUE << "   - SHIPS LEFT: " << SHIP2_count << RESET << endl;
+		cout << BROWN << "{S}" << BLUE << "    - SHIPS LEFT: " << SHIP1_count << RESET << endl;
 	}
 
 	const void S_P_Victory()
@@ -1263,6 +1776,7 @@ public:
 		cout << GREY << "|" << RED << S_name << "'s" GREY << "|" << ORANGE << " GAME RESULTS: " << endl << endl;
 		cout << BLUE << "Score: " << S_P_score << RESET << endl;
 		cout << BLUE << "SUNKED ship's parts: 20" << RESET << endl;
+		cout << BLUE << "SUNKED ships: 10" << RESET << endl;
 	}
 
 };
@@ -1388,7 +1902,7 @@ MultiPlayer_A() : P_name(" "), P_letter(' '), P_number(0), P_letter_number(0), P
 MultiPlayer_A(string x) : P_name(x), P_letter(' '), P_number(0), P_letter_number(0), PvalidInput(0), Pvalidas(0), left_ships(10), P_letter_to_str(" "), P_number_to_str(" "), P_letter_number_str(" "), P_klaida_cant(0), P_ltr_str(" "), P_nmb_ltr_str(" "), A_I_score(0), A_I_ships_count(20), A_I_steps(1), A_letter(' '), A_number(0), A_X_l(0), A_Y_n(0), A_GameBoardSize(10), eile(0), stulpelis(0), eile_desine(0), stulpelis_apacia(0), eile_kaire(0), stulpelis_virsus(0), eile_is_desines(0), eile_is_kaires(0), stulpelis_is_apacios(0), stulpelis_is_virsaus(0), shootingas(0) {}
 ~MultiPlayer_A() {}
 
-	void enterYourName()
+	void operator ++(int)
 	{
 		system("cls");
 		drawA_I_title();
@@ -4158,9 +4672,6 @@ void directionsGameMenu()
 	if (S == true) directionsSinglePlayerGameMenu();
 	if (M == true) directionsMultiPlayerGameMenu();
 
-	//cout << "S = " << S << endl;
-	//cout << "M = " << M;
-
 }
 
 void directionsRules()
@@ -4377,7 +4888,9 @@ void directionsSinglePlayerGameMenu()
 	SinglePlayerC single;
 
 	single.drawLoading_S_P_GameBoard();
-	single.enterYourName();
+
+	!single; //ENTER YOUR NAME SINGLE MODE
+
 	single.Board_SP();
 	single.drawS_P_GameBoard();
 
@@ -4415,7 +4928,8 @@ void directionsMultiPlayerGameMenu()
 	
 	MultiPlayer_A AI;
 
-	AI.enterYourName();
+	AI++; //ENTER YOUR NAME AI MODE
+
 	AI.drawN_P_GameBoard();
 	AI.generate_N_P_SHIPS();
 
